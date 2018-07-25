@@ -5,6 +5,7 @@
 # It is designed to be called on a timetable for continuous data acquisition.
 #
 
+import datetime
 import os 
 import re
 import sqlite3
@@ -50,6 +51,65 @@ for itor in range(0, len(BTC_WEB_SOURCES)):
             print("Done.")
 
 #Storing Prices
+btc_prices_copy = BTC_PRICES
+now = datetime.datetime.utcnow()
+medianprice = 0.0
+hiprice = 0.0
+hiprice_site = ""
+loprice = 0.0
+loprice_site = ""
 if len(BTC_PRICES) > 0:
+        #find high price and source
+        valuehighest = btc_prices_copy[0] 
+        indexhighest = 0
+        index = 0
+        for price in btc_prices_copy:
+            if price > valuehighest:
+                valuehighest = price
+                indexhighest = index
+            index = index + 1
+        hiprice = btc_prices_copy[indexhighest]
+        hiprice_site = BTC_WEB_SOURCES[indexhighest]
+        #find low price and source
+        valuelowest = btc_prices_copy[0] 
+        indexlowest = 0
+        index = 0
+        for price in btc_prices_copy:
+            if price < valuelowest:
+                valuelowest = price
+                indexlowest = index
+            index = index + 1
+        loprice = btc_prices_copy[indexlowest]
+        loprice_site = BTC_WEB_SOURCES[indexlowest]
+        #find median
+        while len(btc_prices_copy) > 2: 
+            valuelowest = btc_prices_copy[0]
+            indexlowest = 0
+            index = 0
+            for price in btc_prices_copy:
+                if price < valuelowest:
+                    valuelowest = price
+                    indexlowest = index
+                index = index + 1
+            del btc_prices_copy[indexlowest] #delete lowest price 
+            valuehighest = btc_prices_copy[0] 
+            indexhighest = 0
+            index = 0
+            for price in btc_prices_copy:
+                if price > valuehighest:
+                    valuehighest = price
+                    indexhighest = index
+                index = index + 1
+            del btc_prices_copy[indexhighest] #delete highest price
+        if len(btc_prices_copy) == 1:
+            medianprice = btc_prices_copy[0]
+        else:
+            medianprice = (btc_prices_copy[0] + btc_prices_copy[1]) / 2.0
+
+print("Prices scraped: " + str(BTC_PRICES))
+print("Median Price: " + str(medianprice))
+print("High Price: " + str(hiprice) + " from " + str(hiprice_site))
+print("Low Price: " + str(loprice) + " from " + str(loprice_site))
+        
 
 driver.quit()
