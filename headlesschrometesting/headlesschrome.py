@@ -17,22 +17,33 @@ from selenium.webdriver.common.keys import Keys
 PATH_TO_CHROMEDRIVER = './chromedriver/chromedriver'
 driver = webdriver.Chrome(PATH_TO_CHROMEDRIVER)  # Chrome driver, using the chromedriver file in PATH_TO_CHROMEDRIVER, if not specified will search path.
 
-BTC_WEB_SOURCES = ['https://www.coindesk.com/price/',
-                        'https://cointelegraph.com/bitcoin-price-index']
-BTC_PRICE_XPATHS = ["//span[@class='data']",
-                        "//div[@class='value text-nowrap']"]
+class SiteAndXPath:
+    site = ""
+    xpath = ""
+    def __init__(self, spsite, spxpath):
+        self.site = spsite
+        self.xpath = spxpath
+
+
+# BTC_WEB_SOURCES = ['https://www.coindesk.com/price/',
+#                         'https://cointelegraph.com/bitcoin-price-index']
+# BTC_PRICE_XPATHS = ["//span[@class='data']",
+#                         "//div[@class='value text-nowrap']"]
+# assert(len(BTC_WEB_SOURCES) == len(BTC_PRICE_XPATHS)) #the 2 correspond for links and scraping commands
+
+BTC_SOURCES = [SiteAndXPath("https://www.coindesk.com/price/", "//span[@class='data']"),
+                SiteAndXPath("https://cointelegraph.com/bitcoin-price-index", "//div[@class='value text-nowrap']")]
 BTC_PRICES = []
 
-assert(len(BTC_WEB_SOURCES) == len(BTC_PRICE_XPATHS)) #the 2 correspond for links and scraping commands
 
 #Scraping Prices
-for itor in range(0, len(BTC_WEB_SOURCES)):
+for itor in range(0, len(BTC_SOURCES)):
     succeeded_scraping = False
     num_reattempts = 10
     while not succeeded_scraping:
-        print("Scraping " + str(BTC_WEB_SOURCES[itor]) + "...")
-        driver.get(BTC_WEB_SOURCES[itor])
-        btc_value_element = driver.find_element_by_xpath(BTC_PRICE_XPATHS[itor])
+        print("Scraping " + str(BTC_SOURCES[itor].site) + "...")
+        driver.get(BTC_SOURCES[itor].site)
+        btc_value_element = driver.find_element_by_xpath(BTC_SOURCES[itor].xpath)
         btc_value_str = btc_value_element.text
         if btc_value_str == "":
             print("Failed to parse a string from the webpage. Retrying... (" + str(num_reattempts) + " attempts left)")
@@ -69,7 +80,7 @@ if len(BTC_PRICES) > 0:
                 indexhighest = index
             index = index + 1
         hiprice = btc_prices_copy[indexhighest]
-        hiprice_site = BTC_WEB_SOURCES[indexhighest]
+        hiprice_site = BTC_SOURCES[indexhighest].site
         #find low price and source
         valuelowest = btc_prices_copy[0] 
         indexlowest = 0
@@ -80,7 +91,7 @@ if len(BTC_PRICES) > 0:
                 indexlowest = index
             index = index + 1
         loprice = btc_prices_copy[indexlowest]
-        loprice_site = BTC_WEB_SOURCES[indexlowest]
+        loprice_site = BTC_SOURCES[indexlowest].site
         #find median
         while len(btc_prices_copy) > 2: 
             valuelowest = btc_prices_copy[0]
