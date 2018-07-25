@@ -50,6 +50,6 @@ for itor in range(0, len(BTC_WEB_SOURCES)):
             print("Done.")
 
 #Storing Prices
-if len(BTC_PRICES) > 0
+if len(BTC_PRICES) > 0:
 
 driver.quit()
