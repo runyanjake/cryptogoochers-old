@@ -60,7 +60,9 @@ def main():
         print("BTCprices table verified.")
     print("Done.")
     PATH_TO_CHROMEDRIVER = './chromedriver/chromedriver'
-    driver = webdriver.Chrome(PATH_TO_CHROMEDRIVER)  # Chrome driver, using the chromedriver file in PATH_TO_CHROMEDRIVER, if not specified will search path.
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument("--headless")
+    driver = webdriver.Chrome(PATH_TO_CHROMEDRIVER, chrome_options=chrome_options)  # Chrome driver, using the chromedriver file in PATH_TO_CHROMEDRIVER, if not specified will search path.
     for itor in range(0, SCRAPER_ITERATIONS):
         scrape_and_store(connection, driver, itor, SCRAPER_ITERATIONS)
         extendgraph(connection)
