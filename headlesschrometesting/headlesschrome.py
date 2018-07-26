@@ -31,9 +31,35 @@ class SiteAndXPath:
 #                         "//div[@class='value text-nowrap']"]
 # assert(len(BTC_WEB_SOURCES) == len(BTC_PRICE_XPATHS)) #the 2 correspond for links and scraping commands
 
-BTC_SOURCES = [SiteAndXPath("https://www.coindesk.com/price/", "//span[@class='data']"),
-                SiteAndXPath("https://cointelegraph.com/bitcoin-price-index", "//div[@class='value text-nowrap']")]
+BTC_SOURCES = [ #Bitcoin Overview numbers
+                SiteAndXPath("https://www.coindesk.com/price/", "//span[@class='data']"),
+                SiteAndXPath("https://cointelegraph.com/bitcoin-price-index", "//div[@class='value text-nowrap']"),
+                #Bitcoin Trading Site numbers (recent trades)
+                SiteAndXPath("https://bitcoincharts.com/markets/coinbaseUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
+                SiteAndXPath("https://bitcoincharts.com/markets/bitstampUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
+                SiteAndXPath("https://bitcoincharts.com/markets/krakenUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
+                SiteAndXPath("https://bitcoincharts.com/markets/itbitUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
+                SiteAndXPath("https://bitcoincharts.com/markets/coinsbankUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
+                SiteAndXPath("https://bitcoincharts.com/markets/wexUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
+                SiteAndXPath("https://bitcoincharts.com/markets/lakeUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
+                SiteAndXPath("https://bitcoincharts.com/markets/cexUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
+                SiteAndXPath("https://bitcoincharts.com/markets/getbtcUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
+                SiteAndXPath("https://bitcoincharts.com/markets/localbtcUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
+                SiteAndXPath("https://bitcoincharts.com/markets/btcalphaUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
+                SiteAndXPath("https://bitcoincharts.com/markets/okcoinUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
+                SiteAndXPath("https://bitcoincharts.com/markets/bitbayUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
+                SiteAndXPath("https://bitcoincharts.com/markets/bitkonanUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span")]
 BTC_PRICES = []
+
+#Testing Code (Leave commented, for testing)
+# testing = 2
+# driver.get(BTC_SOURCES[testing].site)
+# btc_value_element = driver.find_element_by_xpath(BTC_SOURCES[testing].xpath)
+# btc_value_str = btc_value_element.text
+# print("Element: " + str(btc_value_element))
+# print("Text: " + str(btc_value_str))
+# exit(-1)
+
 
 
 #Scraping Prices
@@ -45,7 +71,7 @@ for itor in range(0, len(BTC_SOURCES)):
         driver.get(BTC_SOURCES[itor].site)
         btc_value_element = driver.find_element_by_xpath(BTC_SOURCES[itor].xpath)
         btc_value_str = btc_value_element.text
-        if btc_value_str == "":
+        if btc_value_str == "" or btc_value_str == None:
             print("Failed to parse a string from the webpage. Retrying... (" + str(num_reattempts) + " attempts left)")
             num_reattempts = num_reattempts-1
             if num_reattempts > 0:
@@ -55,14 +81,16 @@ for itor in range(0, len(BTC_SOURCES)):
                 btc_value = -1.0 #error value, most likely never used
                 succeeded_scraping = True #loop control, dont mean anything
         else:
-            btc_value = float(re.search("[0-9,]+\.[0-9]+", btc_value_str).group(0).replace(",", ""))
+            #Regex will recognize strings with a decimal or integer number, with or without commas denoting thousands.
+            btc_value = float(re.search("[0-9,]+\.[0-9]+|[0-9,]+", btc_value_str).group(0).replace(",", ""))
             BTC_PRICES.append(btc_value)
-            print("Found BTC price " + str(btc_value))
+            print("Success. Found BTC price " + str(btc_value) + ".")
             succeeded_scraping = True
-            print("Done.")
 
 #Storing Prices
-btc_prices_copy = BTC_PRICES
+btc_prices_copy = []
+for price in BTC_PRICES:
+    btc_prices_copy.append(price)
 now = datetime.datetime.utcnow()
 medianprice = 0.0
 hiprice = 0.0
@@ -117,10 +145,12 @@ if len(BTC_PRICES) > 0:
         else:
             medianprice = (btc_prices_copy[0] + btc_prices_copy[1]) / 2.0
 
-print("Prices scraped: " + str(BTC_PRICES))
+print("Prices scraped: " + str(BTC_PRICES) + " (" + str(len(BTC_PRICES)) + " scraped data points).")
 print("Median Price: " + str(medianprice))
 print("High Price: " + str(hiprice) + " from " + str(hiprice_site))
 print("Low Price: " + str(loprice) + " from " + str(loprice_site))
+
+#Make a database if necessary and perform an insertion
         
 
 driver.quit()
