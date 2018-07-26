@@ -43,8 +43,8 @@ BTC_SOURCES = [ #Bitcoin Overview numbers
                 SiteAndXPath("https://bitcoincharts.com/markets/bitkonanUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span")]
 
 #important constants for scraper behavior
-SCRAPER_ITERATIONS = 2
-SCRAPER_WAIT_TIME = 1
+SCRAPER_ITERATIONS = 500
+SCRAPER_WAIT_TIME = 60 #in seconds
 
 #main loop execution
 def main():
@@ -203,8 +203,9 @@ def makegraph(connection):
 
     #upload the file
     now = datetime.datetime.now()
-    plotname = "btc_pricing_" + str(now.month) + "-" + str(now.day) + "_" + str(now.hour % 12) + ":" + str(now.minute)
-    plotly.plotly.plot(data, filename = plotname, auto_open=False)
+    timestring = str(now.month) + "-" + str(now.day) + "_" + str(now.hour) + ":" + str(now.minute)
+    plotly.plotly.plot(data, filename = "btc_pricing_" + timestring, auto_open=False)
+    plotly.plotly.plot([median_trace], filename = "btc_median_trace_" + timestring, auto_open=False)
 
 
 
