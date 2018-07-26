@@ -12,6 +12,7 @@ import plotly.graph_objs as go
 import re
 import sqlite3
 import time
+import selenium
 from selenium import webdriver  
 from selenium.webdriver.chrome.options import Options  
 from selenium.webdriver.common.keys import Keys
@@ -23,6 +24,7 @@ class SiteAndXPath:
         self.site = spsite
         self.xpath = spxpath
 
+#note that cloudflare and other ddos-stoppers messes with the success rate of this program
 BTC_SOURCES = [ #Bitcoin Overview numbers
                 SiteAndXPath("https://www.coindesk.com/price/", "//span[@class='data']"),
                 SiteAndXPath("https://cointelegraph.com/bitcoin-price-index", "//div[@class='value text-nowrap']"),
@@ -43,8 +45,8 @@ BTC_SOURCES = [ #Bitcoin Overview numbers
                 SiteAndXPath("https://bitcoincharts.com/markets/bitkonanUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span")]
 
 #important constants for scraper behavior
-SCRAPER_ITERATIONS = 500
-SCRAPER_WAIT_TIME = 60 #in seconds
+SCRAPER_ITERATIONS = 10000
+SCRAPER_WAIT_TIME = 900 #in seconds (15 mins > 96 updates a day, plotly limit for unpaid is 100)
 
 #main loop execution
 def main():
@@ -61,8 +63,8 @@ def main():
     driver = webdriver.Chrome(PATH_TO_CHROMEDRIVER)  # Chrome driver, using the chromedriver file in PATH_TO_CHROMEDRIVER, if not specified will search path.
     for itor in range(0, SCRAPER_ITERATIONS):
         scrape_and_store(connection, driver, itor, SCRAPER_ITERATIONS)
+        extendgraph(connection)
         time.sleep(SCRAPER_WAIT_TIME) #sleep some amount of time before scraping again
-    makegraph(connection)
     driver.quit() #quit the webdriver
     connection.close() #close the connection
 
@@ -84,11 +86,27 @@ def scrape_and_store(connection, driver, cur_scrape, max_scrapes):
         succeeded_scraping = False
         num_reattempts = 10
         while not succeeded_scraping:
-            print("\tScraping " + str(BTC_SOURCES[itor].site) + "...")
-            driver.get(BTC_SOURCES[itor].site)
-            btc_value_element = driver.find_element_by_xpath(BTC_SOURCES[itor].xpath)
-            btc_value_str = btc_value_element.text
-            if btc_value_str == "" or btc_value_str == None:
+            try:
+                print("\tScraping " + str(BTC_SOURCES[itor].site) + "...")
+                driver.get(BTC_SOURCES[itor].site)
+                btc_value_element = driver.find_element_by_xpath(BTC_SOURCES[itor].xpath)
+                btc_value_str = btc_value_element.text
+                if btc_value_str == "" or btc_value_str == None:
+                    print("\tFailed to parse a string from the webpage. Retrying... (" + str(num_reattempts) + " attempts left)")
+                    num_reattempts = num_reattempts-1
+                    if num_reattempts > 0:
+                        succeeded_scraping = False
+                    else:
+                        print("\tFailed to parse a string from the webpage. Continuing...")
+                        btc_value = -1.0 #error value, most likely never used
+                        succeeded_scraping = True #loop control, dont mean anything
+                else:
+                    #Regex will recognize strings with a decimal or integer number, with or without commas denoting thousands.
+                    btc_value = float(re.search("[0-9,]+\.[0-9]+|[0-9,]+", btc_value_str).group(0).replace(",", ""))
+                    BTC_PRICES.append(btc_value)
+                    print("\tSuccess. Found BTC price " + str(btc_value) + ".")
+                    succeeded_scraping = True
+            except selenium.common.exceptions.NoSuchElementException:
                 print("\tFailed to parse a string from the webpage. Retrying... (" + str(num_reattempts) + " attempts left)")
                 num_reattempts = num_reattempts-1
                 if num_reattempts > 0:
@@ -97,12 +115,6 @@ def scrape_and_store(connection, driver, cur_scrape, max_scrapes):
                     print("\tFailed to parse a string from the webpage. Continuing...")
                     btc_value = -1.0 #error value, most likely never used
                     succeeded_scraping = True #loop control, dont mean anything
-            else:
-                #Regex will recognize strings with a decimal or integer number, with or without commas denoting thousands.
-                btc_value = float(re.search("[0-9,]+\.[0-9]+|[0-9,]+", btc_value_str).group(0).replace(",", ""))
-                BTC_PRICES.append(btc_value)
-                print("\tSuccess. Found BTC price " + str(btc_value) + ".")
-                succeeded_scraping = True
     #Doing some math with the prices.
     btc_prices_copy = []
     for price in BTC_PRICES:
@@ -169,14 +181,13 @@ def scrape_and_store(connection, driver, cur_scrape, max_scrapes):
     connection.execute(prepstmt)
     connection.commit()
 
-def makegraph(connection):
+def extendgraph(connection):
     print("Creating a Graph...")
     dates = []
     medians = []
     hi_vals = []
     lo_vals = []
     for row in connection.execute("SELECT * FROM BTCprices ORDER BY date DESC"):
-        print(row)
         dates.append(row[0])
         medians.append(row[1])
         hi_vals.append(row[2])
@@ -202,11 +213,11 @@ def makegraph(connection):
     data = [median_trace, hi_trace, lo_trace]
 
     #upload the file
-    now = datetime.datetime.now()
-    timestring = str(now.month) + "-" + str(now.day) + "_" + str(now.hour) + ":" + str(now.minute)
-    plotly.plotly.plot(data, filename = "btc_pricing_" + timestring, auto_open=False)
-    plotly.plotly.plot([median_trace], filename = "btc_median_trace_" + timestring, auto_open=False)
-
+    try:
+        btc_pricing_url = plotly.plotly.plot(data, filename="btc_pricing", auto_open=False)
+        btc_median_trace_url = plotly.plotly.plot([median_trace], filename="btc_median_trace", auto_open=False)
+    except: 
+        print("Plotly denied the request to update plot. Skipping plot update for now.")
 
 
     print("Done.")
