@@ -43,8 +43,8 @@ BTC_SOURCES = [ #Bitcoin Overview numbers
                 SiteAndXPath("https://bitcoincharts.com/markets/bitkonanUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span")]
 
 #important constants for scraper behavior
-SCRAPER_ITERATIONS = 1
-SCRAPER_WAIT_TIME = 10
+SCRAPER_ITERATIONS = 2
+SCRAPER_WAIT_TIME = 1
 
 #main loop execution
 def main():
@@ -60,7 +60,7 @@ def main():
     PATH_TO_CHROMEDRIVER = './chromedriver/chromedriver'
     driver = webdriver.Chrome(PATH_TO_CHROMEDRIVER)  # Chrome driver, using the chromedriver file in PATH_TO_CHROMEDRIVER, if not specified will search path.
     for itor in range(0, SCRAPER_ITERATIONS):
-        scrape_and_store(connection, driver)
+        scrape_and_store(connection, driver, itor, SCRAPER_ITERATIONS)
         time.sleep(SCRAPER_WAIT_TIME) #sleep some amount of time before scraping again
     makegraph(connection)
     driver.quit() #quit the webdriver
@@ -76,31 +76,32 @@ def test():
     print("Text: " + str(btc_value_str))
     exit(-1)
 
-def scrape_and_store(connection, driver):
+def scrape_and_store(connection, driver, cur_scrape, max_scrapes):
+    print("Scraping iteration " + str(cur_scrape+1) + "/" + str(max_scrapes) + ":")
     BTC_PRICES = []
     #Scraping Prices
     for itor in range(0, len(BTC_SOURCES)):
         succeeded_scraping = False
         num_reattempts = 10
         while not succeeded_scraping:
-            print("Scraping " + str(BTC_SOURCES[itor].site) + "...")
+            print("\tScraping " + str(BTC_SOURCES[itor].site) + "...")
             driver.get(BTC_SOURCES[itor].site)
             btc_value_element = driver.find_element_by_xpath(BTC_SOURCES[itor].xpath)
             btc_value_str = btc_value_element.text
             if btc_value_str == "" or btc_value_str == None:
-                print("Failed to parse a string from the webpage. Retrying... (" + str(num_reattempts) + " attempts left)")
+                print("\tFailed to parse a string from the webpage. Retrying... (" + str(num_reattempts) + " attempts left)")
                 num_reattempts = num_reattempts-1
                 if num_reattempts > 0:
                     succeeded_scraping = False
                 else:
-                    print("Failed to parse a string from the webpage. Continuing...")
+                    print("\tFailed to parse a string from the webpage. Continuing...")
                     btc_value = -1.0 #error value, most likely never used
                     succeeded_scraping = True #loop control, dont mean anything
             else:
                 #Regex will recognize strings with a decimal or integer number, with or without commas denoting thousands.
                 btc_value = float(re.search("[0-9,]+\.[0-9]+|[0-9,]+", btc_value_str).group(0).replace(",", ""))
                 BTC_PRICES.append(btc_value)
-                print("Success. Found BTC price " + str(btc_value) + ".")
+                print("\tSuccess. Found BTC price " + str(btc_value) + ".")
                 succeeded_scraping = True
     #Doing some math with the prices.
     btc_prices_copy = []
@@ -159,10 +160,10 @@ def scrape_and_store(connection, driver):
                 medianprice = btc_prices_copy[0]
             else:
                 medianprice = (btc_prices_copy[0] + btc_prices_copy[1]) / 2.0
-    print("\nPrices scraped: " + str(BTC_PRICES) + " (" + str(len(BTC_PRICES)) + " scraped data points).")
-    print("Median Price: " + str(medianprice))
-    print("High Price: " + str(hiprice) + " from " + str(hiprice_site))
-    print("Low Price: " + str(loprice) + " from " + str(loprice_site) + "\n")
+    print("\n\tScraped " + str(len(BTC_PRICES)) + " websites for data points).")
+    print("\tMedian Price: " + str(medianprice))
+    print("\tHigh Price: " + str(hiprice) + " from " + str(hiprice_site))
+    print("\tLow Price: " + str(loprice) + " from " + str(loprice_site) + "\n")
     #Perform insertion into database
     prepstmt = "INSERT INTO BTCprices VALUES ('" + str(now) + "'," + str(medianprice) + "," + str(hiprice) + ",'" + str(hiprice_site) + "',"  + str(loprice) + ",'" + str(loprice_site) + "')" 
     connection.execute(prepstmt)
