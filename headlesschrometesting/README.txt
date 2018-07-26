@@ -7,3 +7,5 @@ source env/bin/activate	       	//start the environment
 source deactivate		//close the environment
 
 pip install selenium		//the selenium package for running headless browsers
+pip install plotly
+pip install plotly --upgrade

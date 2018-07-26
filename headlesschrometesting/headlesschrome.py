@@ -6,7 +6,9 @@
 #
 
 import datetime
-import os 
+import os
+import plotly
+import plotly.graph_objs as go
 import re
 import sqlite3
 import time
@@ -39,8 +41,30 @@ BTC_SOURCES = [ #Bitcoin Overview numbers
                 SiteAndXPath("https://bitcoincharts.com/markets/okcoinUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
                 SiteAndXPath("https://bitcoincharts.com/markets/bitbayUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
                 SiteAndXPath("https://bitcoincharts.com/markets/bitkonanUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span")]
-BTC_PRICES = []
 
+#important constants for scraper behavior
+SCRAPER_ITERATIONS = 1
+SCRAPER_WAIT_TIME = 10
+
+#main loop execution
+def main():
+    #Database creation/connection
+    print("Performing database setup...")
+    connection = sqlite3.connect('databases/cryptogoochers.db')
+    try:
+        connection.execute('''CREATE TABLE BTCprices
+                (date timestamp, median_price real, hi_price real, hi_price_site text, lo_price real, lo_price_site text)''')
+    except sqlite3.OperationalError:
+        print("BTCprices table verified.")
+    print("Done.")
+    PATH_TO_CHROMEDRIVER = './chromedriver/chromedriver'
+    driver = webdriver.Chrome(PATH_TO_CHROMEDRIVER)  # Chrome driver, using the chromedriver file in PATH_TO_CHROMEDRIVER, if not specified will search path.
+    for itor in range(0, SCRAPER_ITERATIONS):
+        scrape_and_store(connection, driver)
+        time.sleep(SCRAPER_WAIT_TIME) #sleep some amount of time before scraping again
+    makegraph(connection)
+    driver.quit() #quit the webdriver
+    connection.close() #close the connection
 
 #Testing Code
 def test():
@@ -52,29 +76,8 @@ def test():
     print("Text: " + str(btc_value_str))
     exit(-1)
 
-
-#main loop execution
-def main():
-    #Database creation/connection
-    print("Performing database setup...")
-    connection = sqlite3.connect('databases/cryptogoochers.db')
-    try:
-        print("No database exists. Creating a new one.")
-        connection.execute('''CREATE TABLE BTCprices
-                (date text, median_price real, hi_price real, hi_price_site text, lo_price real, lo_price_site text)''')
-    except sqlite3.OperationalError:
-        print("BTCprices table verified.")
-    print("Done.")
-
-    PATH_TO_CHROMEDRIVER = './chromedriver/chromedriver'
-    driver = webdriver.Chrome(PATH_TO_CHROMEDRIVER)  # Chrome driver, using the chromedriver file in PATH_TO_CHROMEDRIVER, if not specified will search path.
-
-    scrape_and_store(connection, driver)
-
-    driver.quit()
-
-
 def scrape_and_store(connection, driver):
+    BTC_PRICES = []
     #Scraping Prices
     for itor in range(0, len(BTC_SOURCES)):
         succeeded_scraping = False
@@ -164,8 +167,47 @@ def scrape_and_store(connection, driver):
     prepstmt = "INSERT INTO BTCprices VALUES ('" + str(now) + "'," + str(medianprice) + "," + str(hiprice) + ",'" + str(hiprice_site) + "',"  + str(loprice) + ",'" + str(loprice_site) + "')" 
     connection.execute(prepstmt)
     connection.commit()
-    connection.close()
 
+def makegraph(connection):
+    print("Creating a Graph...")
+    dates = []
+    medians = []
+    hi_vals = []
+    lo_vals = []
+    for row in connection.execute("SELECT * FROM BTCprices ORDER BY date DESC"):
+        print(row)
+        dates.append(row[0])
+        medians.append(row[1])
+        hi_vals.append(row[2])
+        lo_vals.append(row[4])
+
+
+    #plotly setup
+    plotly.tools.set_credentials_file(username='cryptogoochers', api_key='eH5qdbtfFBm78btw82io')
+    plotly.tools.set_config_file(world_readable=True, sharing='public')
+
+    median_trace = go.Scatter(
+        x=dates,
+        y=medians
+    )
+    hi_trace = go.Scatter(
+        x=dates,
+        y=hi_vals
+    )
+    lo_trace = go.Scatter(
+        x=dates,
+        y=lo_vals
+    )
+    data = [median_trace, hi_trace, lo_trace]
+
+    #upload the file
+    now = datetime.datetime.now()
+    plotname = "btc_pricing_" + str(now.month) + "-" + str(now.day) + "_" + str(now.hour % 12) + ":" + str(now.minute)
+    plotly.plotly.plot(data, filename = plotname, auto_open=False)
+
+
+
+    print("Done.")
 
 #main loop execution
 if __name__ == "__main__": main()
