@@ -151,7 +151,7 @@ def scrape_and_store(connection, driver, cur_scrape, max_scrapes):
                     btc_value = -1.0 #error value, most likely never used
                     finished_scraping = True #loop control, dont mean anything
             except:
-                print("\tError: Connection to " + str(BTC_SOURCES[itor]) + " failed. Skipping it for now.")
+                print("\tError: Connection to " + str(BTC_SOURCES[itor].site) + " failed. Skipping it for now.")
                 finished_scraping = True
     #Doing some math with the prices.
     btc_prices_copy = []

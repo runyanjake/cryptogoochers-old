@@ -20,35 +20,33 @@ from selenium.webdriver.firefox.options import Options
 from selenium import webdriver   
 
 class SiteAndXPath:
+    ticker = ""
     site = ""
     xpath = ""
-    def __init__(self, spsite, spxpath):
+    def __init__(self, sticker, spsite, spxpath):
+        self.ticker = sticker
         self.site = spsite
         self.xpath = spxpath
 
 #note that cloudflare and other ddos-stoppers messes with the success rate of this program
 BTC_SOURCES = [ #Bitcoin Overview numbers
-                SiteAndXPath("https://www.coindesk.com/price/", "//span[@class='data']"),
-                SiteAndXPath("https://cointelegraph.com/bitcoin-price-index", "//div[@class='value text-nowrap']"),
+                SiteAndXPath("BTC", "https://www.coindesk.com/price/", "//span[@class='data']"),
+                SiteAndXPath("BTC", "https://cointelegraph.com/bitcoin-price-index", "//div[@class='value text-nowrap']"),
                 #Bitcoin Trading Site numbers (recent trades)
-                SiteAndXPath("https://bitcoincharts.com/markets/coinbaseUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
-                SiteAndXPath("https://bitcoincharts.com/markets/bitstampUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
-                SiteAndXPath("https://bitcoincharts.com/markets/krakenUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
-                SiteAndXPath("https://bitcoincharts.com/markets/itbitUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
-                SiteAndXPath("https://bitcoincharts.com/markets/coinsbankUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
-                SiteAndXPath("https://bitcoincharts.com/markets/wexUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
-                SiteAndXPath("https://bitcoincharts.com/markets/lakeUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
-                SiteAndXPath("https://bitcoincharts.com/markets/cexUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
-                SiteAndXPath("https://bitcoincharts.com/markets/getbtcUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
-                SiteAndXPath("https://bitcoincharts.com/markets/localbtcUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
-                SiteAndXPath("https://bitcoincharts.com/markets/btcalphaUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
-                SiteAndXPath("https://bitcoincharts.com/markets/okcoinUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
-                SiteAndXPath("https://bitcoincharts.com/markets/bitbayUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
-                SiteAndXPath("https://bitcoincharts.com/markets/bitkonanUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span")]
-
-#important constants for scraper behavior
-SCRAPER_ITERATIONS = 10000
-SCRAPER_WAIT_TIME = 900 #in seconds (15 mins > 96 updates a day, plotly limit for unpaid is 100)
+                SiteAndXPath("BTC", "https://bitcoincharts.com/markets/coinbaseUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
+                SiteAndXPath("BTC", "https://bitcoincharts.com/markets/bitstampUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
+                SiteAndXPath("BTC", "https://bitcoincharts.com/markets/krakenUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
+                SiteAndXPath("BTC", "https://bitcoincharts.com/markets/itbitUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
+                SiteAndXPath("BTC", "https://bitcoincharts.com/markets/coinsbankUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
+                SiteAndXPath("BTC", "https://bitcoincharts.com/markets/wexUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
+                SiteAndXPath("BTC", "https://bitcoincharts.com/markets/lakeUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
+                SiteAndXPath("BTC", "https://bitcoincharts.com/markets/cexUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
+                SiteAndXPath("BTC", "https://bitcoincharts.com/markets/getbtcUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
+                SiteAndXPath("BTC", "https://bitcoincharts.com/markets/localbtcUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
+                SiteAndXPath("BTC", "https://bitcoincharts.com/markets/btcalphaUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
+                SiteAndXPath("BTC", "https://bitcoincharts.com/markets/okcoinUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
+                SiteAndXPath("BTC", "https://bitcoincharts.com/markets/bitbayUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
+                SiteAndXPath("BTC", "https://bitcoincharts.com/markets/bitkonanUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span")]
 
 #program defaults
 DEF_CURRENCY = "BTC"
@@ -88,21 +86,23 @@ def main():
     # Database creation/connection
     print("Performing database setup...")
     connection = sqlite3.connect('databases/cryptogoochers.db')
+    tablename = options.currency + "prices"
     try:
-        connection.execute('''CREATE TABLE BTCprices
-                (date timestamp, median_price real, hi_price real, hi_price_site text, lo_price real, lo_price_site text)''')
+        connection.execute('''CREATE TABLE ''' + str(tablename) + 
+                ''' (currency text, date timestamp, median_price real, hi_price real, hi_price_site text, lo_price real, lo_price_site text)''')
+        print(str(tablename) + " table was created.")
     except sqlite3.OperationalError:
-        print("BTCprices table verified.")
+        print(str(tablename) + " table verified.")
     print("Done.")
 
-    options = Options()
+    ffox_options = Options()
     # options.add_argument("--headless")
-    driver = webdriver.Firefox(firefox_options=options, executable_path="/Users/runyanjake/Desktop/Academia/CodingStuff/Repositories/cryptogoochers/headlessfirefoxtesting/firefoxdriver/geckodriver")
+    driver = webdriver.Firefox(firefox_options=ffox_options, executable_path="/Users/runyanjake/Desktop/Academia/CodingStuff/Repositories/cryptogoochers/headlessfirefoxtesting/firefoxdriver/geckodriver")
 
-    for itor in range(0, SCRAPER_ITERATIONS):
-        scrape_and_store(connection, driver, itor, SCRAPER_ITERATIONS)
-        extendgraph(connection)
-        time.sleep(SCRAPER_WAIT_TIME) #sleep some amount of time before scraping again
+    for itor in range(0, options.iterations):
+        scrape_and_store(options, tablename, connection, driver, itor, options.iterations)
+        extendgraph(connection, tablename)
+        time.sleep(options.wait_time) #sleep some amount of time before scraping again
     driver.quit() #quit the webdriver
     connection.close() #close the connection
 
@@ -116,20 +116,38 @@ def test():
     print("Text: " + str(btc_value_str))
     exit(-1)
 
-def scrape_and_store(connection, driver, cur_scrape, max_scrapes):
+def scrape_and_store(options, tablename, connection, driver, cur_scrape, max_scrapes):
     print("Scraping iteration " + str(cur_scrape+1) + "/" + str(max_scrapes) + ":")
     BTC_PRICES = []
     #Scraping Prices
     for itor in range(0, len(BTC_SOURCES)):
-        finished_scraping = False
-        num_reattempts = 10
-        while not finished_scraping:
-            try:
-                print("\tScraping " + str(BTC_SOURCES[itor].site) + "...")
-                driver.get(BTC_SOURCES[itor].site)
-                btc_value_element = driver.find_element_by_xpath(BTC_SOURCES[itor].xpath)
-                btc_value_str = btc_value_element.text
-                if btc_value_str == "" or btc_value_str == None:
+        if not BTC_SOURCES[itor].ticker == options.currency:
+            print("Website " + str(BTC_SOURCES[itor].site) + " is not for the currency " + str(options.currency))
+        else:
+            finished_scraping = False
+            num_reattempts = 10
+            while not finished_scraping:
+                try:
+                    print("\tScraping " + str(BTC_SOURCES[itor].site) + "...")
+                    driver.get(BTC_SOURCES[itor].site)
+                    btc_value_element = driver.find_element_by_xpath(BTC_SOURCES[itor].xpath)
+                    btc_value_str = btc_value_element.text
+                    if btc_value_str == "" or btc_value_str == None:
+                        print("\tFailed to parse a string from the webpage. Retrying... (" + str(num_reattempts) + " attempts left)")
+                        num_reattempts = num_reattempts-1
+                        if num_reattempts > 0:
+                            finished_scraping = False
+                        else:
+                            print("\tFailed to parse a string from the webpage. Continuing...")
+                            btc_value = -1.0 #error value, most likely never used
+                            finished_scraping = True #loop control, dont mean anything
+                    else:
+                        #Regex will recognize strings with a decimal or integer number, with or without commas denoting thousands.
+                        btc_value = float(re.search("[0-9,]+\.[0-9]+|[0-9,]+", btc_value_str).group(0).replace(",", ""))
+                        BTC_PRICES.append(btc_value)
+                        print("\tSuccess. Found BTC price " + str(btc_value) + ".")
+                        finished_scraping = True
+                except selenium.common.exceptions.NoSuchElementException:
                     print("\tFailed to parse a string from the webpage. Retrying... (" + str(num_reattempts) + " attempts left)")
                     num_reattempts = num_reattempts-1
                     if num_reattempts > 0:
@@ -138,24 +156,9 @@ def scrape_and_store(connection, driver, cur_scrape, max_scrapes):
                         print("\tFailed to parse a string from the webpage. Continuing...")
                         btc_value = -1.0 #error value, most likely never used
                         finished_scraping = True #loop control, dont mean anything
-                else:
-                    #Regex will recognize strings with a decimal or integer number, with or without commas denoting thousands.
-                    btc_value = float(re.search("[0-9,]+\.[0-9]+|[0-9,]+", btc_value_str).group(0).replace(",", ""))
-                    BTC_PRICES.append(btc_value)
-                    print("\tSuccess. Found BTC price " + str(btc_value) + ".")
+                except:
+                    print("\tError: Connection to " + str(BTC_SOURCES[itor].site) + " failed. Skipping it for now.")
                     finished_scraping = True
-            except selenium.common.exceptions.NoSuchElementException:
-                print("\tFailed to parse a string from the webpage. Retrying... (" + str(num_reattempts) + " attempts left)")
-                num_reattempts = num_reattempts-1
-                if num_reattempts > 0:
-                    finished_scraping = False
-                else:
-                    print("\tFailed to parse a string from the webpage. Continuing...")
-                    btc_value = -1.0 #error value, most likely never used
-                    finished_scraping = True #loop control, dont mean anything
-            except:
-                print("\tError: Connection to " + str(BTC_SOURCES[itor]) + " failed. Skipping it for now.")
-                finished_scraping = True
     #Doing some math with the prices.
     btc_prices_copy = []
     for price in BTC_PRICES:
@@ -217,18 +220,19 @@ def scrape_and_store(connection, driver, cur_scrape, max_scrapes):
     print("\tMedian Price: " + str(medianprice))
     print("\tHigh Price: " + str(hiprice) + " from " + str(hiprice_site))
     print("\tLow Price: " + str(loprice) + " from " + str(loprice_site) + "\n")
-    #Perform insertion into database
-    prepstmt = "INSERT INTO BTCprices VALUES ('" + str(now) + "'," + str(medianprice) + "," + str(hiprice) + ",'" + str(hiprice_site) + "',"  + str(loprice) + ",'" + str(loprice_site) + "')" 
-    connection.execute(prepstmt)
-    connection.commit()
+    if len(BTC_PRICES) > 0:
+        #Perform insertion into database
+        prepstmt = "INSERT INTO " + str(tablename) + " VALUES ('" + str(options.currency) + "','"  + str(now) + "'," + str(medianprice) + "," + str(hiprice) + ",'" + str(hiprice_site) + "',"  + str(loprice) + ",'" + str(loprice_site) + "')" 
+        connection.execute(prepstmt)
+        connection.commit()
 
-def extendgraph(connection):
+def extendgraph(connection, tablename):
     print("Creating a Graph...")
     dates = []
     medians = []
     hi_vals = []
     lo_vals = []
-    for row in connection.execute("SELECT * FROM BTCprices ORDER BY date DESC"):
+    for row in connection.execute("SELECT * FROM " + str(tablename) + " ORDER BY date DESC"):
         dates.append(row[0])
         medians.append(row[1])
         hi_vals.append(row[2])
@@ -249,11 +253,11 @@ def extendgraph(connection):
     data = [median_trace, hi_trace, lo_trace]
 
     #upload the file
+    pricingfile = tablename
+    medianfile = tablename + "_median"
     try:
-
-        #update
-        btc_pricing_url = plotly.plotly.plot(data, filename="btc_pricing", auto_open=False)
-        btc_median_trace_url = plotly.plotly.plot([median_trace], filename="btc_median_trace", auto_open=False)
+        btc_pricing_url = plotly.plotly.plot(data, filename=pricingfile, auto_open=False)
+        btc_median_trace_url = plotly.plotly.plot([median_trace], filename=medianfile, auto_open=False)
     except: 
         print("\tERROR: Plotly denied the request to update plot. Skipping plot update for now.")
 
