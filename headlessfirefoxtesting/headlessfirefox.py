@@ -7,9 +7,11 @@
 
 import datetime
 import os
+import optparse
 import plotly
 import plotly.graph_objs as go
 import re
+import requests
 import sqlite3
 import sys
 import time
@@ -48,8 +50,41 @@ BTC_SOURCES = [ #Bitcoin Overview numbers
 SCRAPER_ITERATIONS = 10000
 SCRAPER_WAIT_TIME = 900 #in seconds (15 mins > 96 updates a day, plotly limit for unpaid is 100)
 
+#program defaults
+DEF_CURRENCY = "BTC"
+DEF_ITERATIONS = 10000
+DEF_WAIT_TIME = 900
+
 #main loop execution
 def main():
+    #Cmd line validation & setup
+    optionParser = optparse.OptionParser()
+    optionParser.add_option("--currency",
+                        dest="currency",
+                        type="string",
+                        help="""Set the currency to update for. Default=%s""" 
+                                % DEF_CURRENCY,
+                        default=DEF_CURRENCY)
+    optionParser.add_option("--iterations",
+                        dest="iterations",
+                        type="int",
+                        help="""Number of iterations to run for. Default=%d""" 
+                                % DEF_ITERATIONS,
+                        default=DEF_ITERATIONS)
+    optionParser.add_option("--wait_time",
+                        dest="wait_time",
+                        type="int",
+                        help="""Time (seconds) to wait between scraping runs. Default=%d""" 
+                                % DEF_WAIT_TIME,
+                        default=DEF_WAIT_TIME)
+    (options, args) = optionParser.parse_args()
+
+    #plotly setup
+    print("Establishing connection to plotly...")
+    plotly.tools.set_credentials_file(username='cryptogoochers', api_key='eH5qdbtfFBm78btw82io')
+    plotly.tools.set_config_file(world_readable=True, sharing='public')
+    print("Done.")
+
     # Database creation/connection
     print("Performing database setup...")
     connection = sqlite3.connect('databases/cryptogoochers.db')
@@ -61,7 +96,7 @@ def main():
     print("Done.")
 
     options = Options()
-    options.add_argument("--headless")
+    # options.add_argument("--headless")
     driver = webdriver.Firefox(firefox_options=options, executable_path="/Users/runyanjake/Desktop/Academia/CodingStuff/Repositories/cryptogoochers/headlessfirefoxtesting/firefoxdriver/geckodriver")
 
     for itor in range(0, SCRAPER_ITERATIONS):
@@ -86,9 +121,9 @@ def scrape_and_store(connection, driver, cur_scrape, max_scrapes):
     BTC_PRICES = []
     #Scraping Prices
     for itor in range(0, len(BTC_SOURCES)):
-        succeeded_scraping = False
+        finished_scraping = False
         num_reattempts = 10
-        while not succeeded_scraping:
+        while not finished_scraping:
             try:
                 print("\tScraping " + str(BTC_SOURCES[itor].site) + "...")
                 driver.get(BTC_SOURCES[itor].site)
@@ -98,26 +133,29 @@ def scrape_and_store(connection, driver, cur_scrape, max_scrapes):
                     print("\tFailed to parse a string from the webpage. Retrying... (" + str(num_reattempts) + " attempts left)")
                     num_reattempts = num_reattempts-1
                     if num_reattempts > 0:
-                        succeeded_scraping = False
+                        finished_scraping = False
                     else:
                         print("\tFailed to parse a string from the webpage. Continuing...")
                         btc_value = -1.0 #error value, most likely never used
-                        succeeded_scraping = True #loop control, dont mean anything
+                        finished_scraping = True #loop control, dont mean anything
                 else:
                     #Regex will recognize strings with a decimal or integer number, with or without commas denoting thousands.
                     btc_value = float(re.search("[0-9,]+\.[0-9]+|[0-9,]+", btc_value_str).group(0).replace(",", ""))
                     BTC_PRICES.append(btc_value)
                     print("\tSuccess. Found BTC price " + str(btc_value) + ".")
-                    succeeded_scraping = True
+                    finished_scraping = True
             except selenium.common.exceptions.NoSuchElementException:
                 print("\tFailed to parse a string from the webpage. Retrying... (" + str(num_reattempts) + " attempts left)")
                 num_reattempts = num_reattempts-1
                 if num_reattempts > 0:
-                    succeeded_scraping = False
+                    finished_scraping = False
                 else:
                     print("\tFailed to parse a string from the webpage. Continuing...")
                     btc_value = -1.0 #error value, most likely never used
-                    succeeded_scraping = True #loop control, dont mean anything
+                    finished_scraping = True #loop control, dont mean anything
+            except:
+                print("\tError: Connection to " + str(BTC_SOURCES[itor]) + " failed. Skipping it for now.")
+                finished_scraping = True
     #Doing some math with the prices.
     btc_prices_copy = []
     for price in BTC_PRICES:
@@ -196,11 +234,6 @@ def extendgraph(connection):
         hi_vals.append(row[2])
         lo_vals.append(row[4])
 
-
-    #plotly setup
-    plotly.tools.set_credentials_file(username='cryptogoochers', api_key='eH5qdbtfFBm78btw82io')
-    plotly.tools.set_config_file(world_readable=True, sharing='public')
-
     median_trace = go.Scatter(
         x=dates,
         y=medians
@@ -217,10 +250,12 @@ def extendgraph(connection):
 
     #upload the file
     try:
+
+        #update
         btc_pricing_url = plotly.plotly.plot(data, filename="btc_pricing", auto_open=False)
         btc_median_trace_url = plotly.plotly.plot([median_trace], filename="btc_median_trace", auto_open=False)
     except: 
-        print("Plotly denied the request to update plot. Skipping plot update for now.")
+        print("\tERROR: Plotly denied the request to update plot. Skipping plot update for now.")
 
 
     print("Done.")
