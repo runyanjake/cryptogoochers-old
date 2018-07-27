@@ -29,10 +29,13 @@ class SiteAndXPath:
         self.xpath = spxpath
 
 #note that cloudflare and other ddos-stoppers messes with the success rate of this program
-BTC_SOURCES = [ #Bitcoin Overview numbers
+BTC_SOURCES = [ 
+                #### ---- B I T C O I N ---- ####
+                #Overview numbers
                 SiteAndXPath("BTC", "https://www.coindesk.com/price/", "//span[@class='data']"),
                 SiteAndXPath("BTC", "https://cointelegraph.com/bitcoin-price-index", "//div[@class='value text-nowrap']"),
-                #Bitcoin Trading Site numbers (recent trades)
+                SiteAndXPath("BTC", "https://coinmarketcap.com/currencies/bitcoin/", "//span[@class='h2 text-semi-bold details-panel-item--price__value']"),
+                #Market Values
                 SiteAndXPath("BTC", "https://bitcoincharts.com/markets/coinbaseUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
                 SiteAndXPath("BTC", "https://bitcoincharts.com/markets/bitstampUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
                 SiteAndXPath("BTC", "https://bitcoincharts.com/markets/krakenUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
@@ -46,7 +49,13 @@ BTC_SOURCES = [ #Bitcoin Overview numbers
                 SiteAndXPath("BTC", "https://bitcoincharts.com/markets/btcalphaUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
                 SiteAndXPath("BTC", "https://bitcoincharts.com/markets/okcoinUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
                 SiteAndXPath("BTC", "https://bitcoincharts.com/markets/bitbayUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
-                SiteAndXPath("BTC", "https://bitcoincharts.com/markets/bitkonanUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span")]
+                SiteAndXPath("BTC", "https://bitcoincharts.com/markets/bitkonanUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
+                
+                #### ---- E T H E R E U M ---- ####
+                #Overview numbers
+                SiteAndXPath("ETH", "https://coinmarketcap.com/currencies/ethereum/", "//span[@class='h2 text-semi-bold details-panel-item--price__value']"),
+                #Market Values
+                ]
 
 #program defaults
 DEF_CURRENCY = "BTC"
@@ -138,9 +147,7 @@ def scrape_and_store(options, tablename, connection, driver, cur_scrape, max_scr
     BTC_PRICES = []
     #Scraping Prices
     for itor in range(0, len(BTC_SOURCES)):
-        if not BTC_SOURCES[itor].ticker == options.currency:
-            print("Website " + str(BTC_SOURCES[itor].site) + " is not for the currency " + str(options.currency))
-        else:
+        if BTC_SOURCES[itor].ticker == options.currency:
             finished_scraping = False
             num_reattempts = 10
             while not finished_scraping:
