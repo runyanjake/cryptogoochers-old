@@ -6,6 +6,9 @@
 #
 
 import datetime
+import matplotlib as mpl
+mpl.use('TkAgg')
+import matplotlib.pyplot as plt
 import os
 import optparse
 import plotly
@@ -126,7 +129,7 @@ def main():
     
 
     for itor in range(0, options.iterations):
-        scrape_and_store(options, tablename, connection, driver, itor, options.iterations)
+        # scrape_and_store(options, tablename, connection, driver, itor, options.iterations)
         extendgraph(connection, tablename)
         time.sleep(options.wait_time) #sleep some amount of time before scraping again
     driver.quit() #quit the webdriver
@@ -240,7 +243,7 @@ def scrape_and_store(options, tablename, connection, driver, cur_scrape, max_scr
                 medianprice = btc_prices_copy[0]
             else:
                 medianprice = (btc_prices_copy[0] + btc_prices_copy[1]) / 2.0
-    print("\n\tScraped " + str(len(BTC_PRICES)) + " websites for data points).")
+    print("\n\tScraped " + str(len(BTC_PRICES)) + " websites for data points). If more than 0, will perform database insert.")
     print("\tMedian Price: " + str(medianprice))
     print("\tHigh Price: " + str(hiprice) + " from " + str(hiprice_site))
     print("\tLow Price: " + str(loprice) + " from " + str(loprice_site) + "\n")
@@ -257,10 +260,39 @@ def extendgraph(connection, tablename):
     hi_vals = []
     lo_vals = []
     for row in connection.execute("SELECT * FROM " + str(tablename) + " ORDER BY date DESC"):
-        dates.append(row[0])
-        medians.append(row[1])
-        hi_vals.append(row[2])
-        lo_vals.append(row[4])
+        dates.append(row[1])
+        medians.append(row[2])
+        hi_vals.append(row[3])
+        lo_vals.append(row[5])
+
+    pricingfilepath = "output/" + tablename
+    medianfilepath = pricingfilepath +  "_median"
+
+    fig1, ax = plt.subplots( nrows=1, ncols=1)  # create figure & 1 axis
+    ax.plot(dates, medians, label="Median")
+    fig1.savefig(medianfilepath+'.png')   # save the figure to file
+    plt.close(fig1)
+
+    fig2, ax = plt.subplots( nrows=1, ncols=1)  # create figure & 1 axis
+    ax.plot(dates, medians, label="Median")
+    ax.plot(dates, hi_vals, label="High Value")
+    ax.plot(dates, lo_vals, label="Low Value")
+    fig2.savefig(pricingfilepath+'.png')   # save the figure to file
+    plt.close(fig2)
+
+    print("Done.")
+
+def extendgraph_plotly(connection, tablename):
+    print("Creating a Graph...")
+    dates = []
+    medians = []
+    hi_vals = []
+    lo_vals = []
+    for row in connection.execute("SELECT * FROM " + str(tablename) + " ORDER BY date DESC"):
+        dates.append(row[1])
+        medians.append(row[2])
+        hi_vals.append(row[3])
+        lo_vals.append(row[5])
 
     median_trace = go.Scatter(
         x=dates,
