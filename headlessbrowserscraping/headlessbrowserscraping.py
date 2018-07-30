@@ -33,7 +33,7 @@ class SiteAndXPath:
 
 #note that cloudflare and other ddos-stoppers messes with the success rate of this program
 BTC_SOURCES = [ 
-                #### ---- B I T C O I N ---- ####
+                #### ---- B T C / B I T C O I N ---- ####
                 #Overview numbers
                 SiteAndXPath("BTC", "https://www.coindesk.com/price/", "//span[@class='data']"),
                 SiteAndXPath("BTC", "https://cointelegraph.com/bitcoin-price-index", "//div[@class='value text-nowrap']"),
@@ -54,9 +54,44 @@ BTC_SOURCES = [
                 SiteAndXPath("BTC", "https://bitcoincharts.com/markets/bitbayUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
                 SiteAndXPath("BTC", "https://bitcoincharts.com/markets/bitkonanUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
                 
-                #### ---- E T H E R E U M ---- ####
+                #### ---- E T H / E T H E R E U M ---- ####
                 #Overview numbers
                 SiteAndXPath("ETH", "https://coinmarketcap.com/currencies/ethereum/", "//span[@class='h2 text-semi-bold details-panel-item--price__value']"),
+                #Market Values
+                
+                #### ---- X R P / R I P P L E ---- ####
+                #Overview numbers
+                SiteAndXPath("XRP", "https://coinmarketcap.com/currencies/ripple/", "//span[@class='h2 text-semi-bold details-panel-item--price__value']"),
+                #Market Values
+                
+                #### ---- E O S ---- ####
+                #Overview numbers
+                SiteAndXPath("EOS", "https://coinmarketcap.com/currencies/eos/", "//span[@class='h2 text-semi-bold details-panel-item--price__value']"),
+                #Market Values
+                
+                #### ---- X L M / S T E L L A R ---- ####
+                #Overview numbers
+                SiteAndXPath("XLM", "https://coinmarketcap.com/currencies/stellar/", "//span[@class='h2 text-semi-bold details-panel-item--price__value']"),
+                #Market Values
+                
+                #### ---- L T C / L I T E C O I N ---- ####
+                #Overview numbers
+                SiteAndXPath("LTC", "https://coinmarketcap.com/currencies/litecoin/", "//span[@class='h2 text-semi-bold details-panel-item--price__value']"),
+                #Market Values
+                
+                #### ---- A D A / C A R D O N O ---- ####
+                #Overview numbers
+                SiteAndXPath("ADA", "https://coinmarketcap.com/currencies/cardano/", "//span[@class='h2 text-semi-bold details-panel-item--price__value']"),
+                #Market Values
+                
+                #### ---- M I O T A / I O T A ---- ####
+                #Overview numbers
+                SiteAndXPath("MIOTA", "https://coinmarketcap.com/currencies/iota/", "//span[@class='h2 text-semi-bold details-panel-item--price__value']"),
+                #Market Values
+                
+                #### ---- T R X / T R O N ---- ####
+                #Overview numbers
+                SiteAndXPath("TRX", "https://coinmarketcap.com/currencies/tron/", "//span[@class='h2 text-semi-bold details-panel-item--price__value']")
                 #Market Values
                 ]
 
@@ -129,7 +164,7 @@ def main():
     
 
     for itor in range(0, options.iterations):
-        # scrape_and_store(options, tablename, connection, driver, itor, options.iterations)
+        scrape_and_store(options, tablename, connection, driver, itor, options.iterations)
         extendgraph(connection, tablename)
         time.sleep(options.wait_time) #sleep some amount of time before scraping again
     driver.quit() #quit the webdriver
