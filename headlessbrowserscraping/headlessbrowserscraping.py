@@ -8,7 +8,9 @@
 import datetime
 import matplotlib as mpl
 mpl.use('TkAgg')
+import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
+from matplotlib import ticker
 import os
 import optparse
 import plotly
@@ -35,7 +37,7 @@ class SiteAndXPath:
 BTC_SOURCES = [ 
                 #### ---- B T C / B I T C O I N ---- ####
                 #Overview numbers
-                SiteAndXPath("BTC", "https://www.coindesk.com/price/", "//span[@class='data']"),
+                # SiteAndXPath("BTC", "https://www.coindesk.com/price/", "//span[@class='data']"), #this site takes forever
                 SiteAndXPath("BTC", "https://cointelegraph.com/bitcoin-price-index", "//div[@class='value text-nowrap']"),
                 SiteAndXPath("BTC", "https://coinmarketcap.com/currencies/bitcoin/", "//span[@class='h2 text-semi-bold details-panel-item--price__value']"),
                 #Market Values
@@ -53,46 +55,67 @@ BTC_SOURCES = [
                 SiteAndXPath("BTC", "https://bitcoincharts.com/markets/okcoinUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
                 SiteAndXPath("BTC", "https://bitcoincharts.com/markets/bitbayUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
                 SiteAndXPath("BTC", "https://bitcoincharts.com/markets/bitkonanUSD.html", "//div[@id='market_summary']/child::div/child::p/child::span"),
+                SiteAndXPath("BTC", "https://coinranking.com/coin/bitcoin-btc", "//span[@class='price__price']"),
                 
                 #### ---- E T H / E T H E R E U M ---- ####
                 #Overview numbers
                 SiteAndXPath("ETH", "https://coinmarketcap.com/currencies/ethereum/", "//span[@class='h2 text-semi-bold details-panel-item--price__value']"),
                 #Market Values
+                SiteAndXPath("ETH", "https://coinranking.com/coin/ethereum-eth", "//span[@class='price__price']"),
                 
                 #### ---- X R P / R I P P L E ---- ####
                 #Overview numbers
                 SiteAndXPath("XRP", "https://coinmarketcap.com/currencies/ripple/", "//span[@class='h2 text-semi-bold details-panel-item--price__value']"),
                 #Market Values
+                SiteAndXPath("XRP", "https://coinranking.com/coin/xrp-xrp", "//span[@class='price__price']"),
                 
                 #### ---- E O S ---- ####
                 #Overview numbers
                 SiteAndXPath("EOS", "https://coinmarketcap.com/currencies/eos/", "//span[@class='h2 text-semi-bold details-panel-item--price__value']"),
                 #Market Values
+                SiteAndXPath("EOS", "https://coinranking.com/coin/eos-eos", "//span[@class='price__price']"),
                 
                 #### ---- X L M / S T E L L A R ---- ####
                 #Overview numbers
                 SiteAndXPath("XLM", "https://coinmarketcap.com/currencies/stellar/", "//span[@class='h2 text-semi-bold details-panel-item--price__value']"),
                 #Market Values
+                SiteAndXPath("XLM", "https://coinranking.com/coin/stellar-xlm", "//span[@class='price__price']"),
                 
                 #### ---- L T C / L I T E C O I N ---- ####
                 #Overview numbers
                 SiteAndXPath("LTC", "https://coinmarketcap.com/currencies/litecoin/", "//span[@class='h2 text-semi-bold details-panel-item--price__value']"),
                 #Market Values
+                SiteAndXPath("LTC", "https://coinranking.com/coin/litecoin-ltc", "//span[@class='price__price']"),
                 
                 #### ---- A D A / C A R D O N O ---- ####
                 #Overview numbers
                 SiteAndXPath("ADA", "https://coinmarketcap.com/currencies/cardano/", "//span[@class='h2 text-semi-bold details-panel-item--price__value']"),
                 #Market Values
+                SiteAndXPath("ADA", "https://coinranking.com/coin/cardano-ada", "//span[@class='price__price']"),
                 
                 #### ---- M I O T A / I O T A ---- ####
                 #Overview numbers
                 SiteAndXPath("MIOTA", "https://coinmarketcap.com/currencies/iota/", "//span[@class='h2 text-semi-bold details-panel-item--price__value']"),
                 #Market Values
+                SiteAndXPath("MIOTA", "https://coinranking.com/coin/iota-iot", "//span[@class='price__price']"),
                 
                 #### ---- T R X / T R O N ---- ####
                 #Overview numbers
-                SiteAndXPath("TRX", "https://coinmarketcap.com/currencies/tron/", "//span[@class='h2 text-semi-bold details-panel-item--price__value']")
+                SiteAndXPath("TRX", "https://coinmarketcap.com/currencies/tron/", "//span[@class='h2 text-semi-bold details-panel-item--price__value']"),
                 #Market Values
+                SiteAndXPath("TRX", "https://coinranking.com/coin/tron-trx", "//span[@class='price__price']"),
+                
+                #### ---- U S D T / T E T H E R---- ####
+                #Overview numbers
+                SiteAndXPath("USDT", "https://coinmarketcap.com/currencies/tether/", "//span[@class='h2 text-semi-bold details-panel-item--price__value']"),
+                #Market Values
+                SiteAndXPath("USDT", "https://coinranking.com/coin/tether-usdt", "//span[@class='price__price']"),
+                
+                #### ---- X M R / M O N E R O ---- ####
+                #Overview numbers
+                SiteAndXPath("XMR", "https://coinmarketcap.com/currencies/monero/", "//span[@class='h2 text-semi-bold details-panel-item--price__value']"),
+                #Market Values
+                SiteAndXPath("XMR", "https://coinranking.com/coin/monero-xmr", "//span[@class='price__price']")
                 ]
 
 #program defaults
@@ -132,12 +155,6 @@ def main():
                         default=DEF_WAIT_TIME)
     (options, args) = optionParser.parse_args()
 
-    #plotly setup
-    print("Establishing connection to plotly...")
-    plotly.tools.set_credentials_file(username='cryptogoochers', api_key='eH5qdbtfFBm78btw82io')
-    plotly.tools.set_config_file(world_readable=True, sharing='public')
-    print("Done.")
-
     # Database creation/connection
     print("Performing database setup...")
     connection = sqlite3.connect('databases/cryptogoochers.db')
@@ -154,12 +171,12 @@ def main():
     if options.browser == 'firefox':
         PATH_TO_FIREFOX = "./browserdrivers/geckodriver"
         ffox_options = Options()
-        # options.add_argument("--headless")
+        #options.add_argument("--headless")
         driver = webdriver.Firefox(firefox_options=ffox_options, executable_path=PATH_TO_FIREFOX)
     else:
         PATH_TO_CHROMEDRIVER = './browserdrivers/chromedriver'
         chrome_options = webdriver.ChromeOptions()
-        # chrome_options.add_argument("--headless")
+        #chrome_options.add_argument("--headless")
         driver = webdriver.Chrome(PATH_TO_CHROMEDRIVER, chrome_options=chrome_options)  # Chrome driver, using the chromedriver file in PATH_TO_CHROMEDRIVER, if not specified will search path.
     
 
@@ -294,30 +311,49 @@ def extendgraph(connection, tablename):
     medians = []
     hi_vals = []
     lo_vals = []
+    itor = 1
     for row in connection.execute("SELECT * FROM " + str(tablename) + " ORDER BY date DESC"):
-        dates.append(row[1])
-        medians.append(row[2])
-        hi_vals.append(row[3])
-        lo_vals.append(row[5])
+        dates.insert(0,row[1])
+        medians.insert(0,row[2])
+        hi_vals.insert(0,row[3])
+        lo_vals.insert(0,row[5])
+        itor = itor + 1
+
+    print("NUMBER OF DATABASE ITEMS GRABBED: " + str(len(dates)))
 
     pricingfilepath = "output/" + tablename
     medianfilepath = pricingfilepath +  "_median"
 
+    #hopefully controlls the number of ticks on the x axis
+    xticks = ticker.MaxNLocator(20)
+
     fig1, ax = plt.subplots( nrows=1, ncols=1)  # create figure & 1 axis
     ax.plot(dates, medians, label="Median")
-    fig1.savefig(medianfilepath+'.png')   # save the figure to file
+    ax.xaxis.set_major_locator(xticks) #set number of ticks on plot
+    plt.setp(ax.xaxis.get_majorticklabels(), rotation=270) #rotate labels
+    plt.tight_layout() #make room for lablels
+    fig1.savefig(medianfilepath+'.png', dpi=1000)   # save the figure to file
     plt.close(fig1)
 
     fig2, ax = plt.subplots( nrows=1, ncols=1)  # create figure & 1 axis
     ax.plot(dates, medians, label="Median")
     ax.plot(dates, hi_vals, label="High Value")
     ax.plot(dates, lo_vals, label="Low Value")
-    fig2.savefig(pricingfilepath+'.png')   # save the figure to file
+    ax.xaxis.set_major_locator(xticks) #set number of ticks on plot
+    plt.setp(ax.xaxis.get_majorticklabels(), rotation=270) #rotate labels
+    plt.tight_layout() #make room for lablels
+    fig2.savefig(pricingfilepath+'.png', dpi=1000)   # save the figure to file
     plt.close(fig2)
 
     print("Done.")
 
 def extendgraph_plotly(connection, tablename):
+    #plotly setup
+    print("Establishing connection to plotly...")
+    plotly.tools.set_credentials_file(username='cryptogoochers', api_key='eH5qdbtfFBm78btw82io')
+    plotly.tools.set_config_file(world_readable=True, sharing='public')
+    print("Done.")
+
     print("Creating a Graph...")
     dates = []
     medians = []
