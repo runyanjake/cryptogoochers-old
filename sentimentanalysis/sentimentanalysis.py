@@ -11,7 +11,7 @@ import sentiment_mod as s
 #consumer key, consumer secret, access token, access secret.
 ckey="WsN6anOVvQaaUOSVQ0aDMimUj"
 csecret="5Wx6R4OZRQh1rNzyq8FePXiO0Uo9yuz0fggGJqMnqxK4ibI0Ip"
-atoken="1025266565619445760-IA52p8ZOqx2DHxydyXCYMkL4gmtEsn"
+atoken="1025266565619445760-IA52p8ZOqx2DHxydyXCYMkL4gmptEsn"
 asecret="TPNzK9xgUjUQkpUWk9aFRJ3xx8z8XyXenUxLJJfWI7K2L"
 
 class listener(StreamListener):
@@ -36,8 +36,10 @@ class listener(StreamListener):
     def on_error(self, status):
         print (status)
 
+#Main execution
+
 auth = OAuthHandler(ckey, csecret)
 auth.set_access_token(atoken, asecret)
 
 twitterStream = Stream(auth, listener())
-twitterStream.filter(track=["car"])
+twitterStream.filter(track=["bitcoin"])
