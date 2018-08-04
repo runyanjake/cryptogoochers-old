@@ -13,7 +13,7 @@ import time
 style.use("ggplot")
 
 fig = plt.figure("SENTIMENT ANALYSIS (Most recent tweets [X] versus Sentiment Aggregate +/- 1 [Y])")
-fig2 = plt.figure("PERCENT SENTIMENT ANALYSIS (Most recent tweets [X] versus Proportion of N recent tweet pos and neg ratios [Y])")
+fig2 = plt.figure("CURRENT PERCENT SENTIMENT ANALYSIS (Most recent tweets [X] versus Proportion of N recent tweet pos and neg ratios [Y])")
 
 ax1 = fig.add_subplot(1,1,1)
 
@@ -41,13 +41,14 @@ def animate(i):
     #Gives counter-average sentments more power to bring things back to even
     #the idea here is that a lot of sequential sentiment one way would be recognized
     #Creates 2 graphs for comparisons
+    X_RANGE = 400
     xar = []
-    x = 0
+    x = 0-X_RANGE
     yar = []
     y = 0
     yar2 = []
     y2 = 0
-    for l in lines[-200:]:
+    for l in lines[0-X_RANGE:]:
         x += 1 #used for both
         if "pos" in l:
             #old
@@ -73,7 +74,7 @@ def animate(i):
     # Plots the percent pos/neg values of the last PSI_POOL_SIZE reads
     # Graphs percents as between -1 and 1, where 1 is 100% positive, 0 is 50/50, and -1 is 100% negative
     # this might require 200+PSI_POOL_SIZE or more things in the array, so use make getdata for awhile
-    PSI_POOL_SIZE = 50 #it tries to get this many, the actual amount that these are calculated from will vary
+    PSI_POOL_SIZE = 200 #it tries to get this many, the actual amount that these are calculated from will vary
     NUM_XVALS = 400
     xvals = []
     pvals = []
