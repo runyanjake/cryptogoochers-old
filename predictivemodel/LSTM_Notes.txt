@@ -1,0 +1,2 @@
+- LSTM nodes intake only integer values. We can make a mapping via a dictionary to pass it non-numeric numbers.
+- 
