@@ -1,6 +1,6 @@
 TF intro: https://www.tensorflow.org/guide/low_level_intro
 
-virtualenv -p python3 env     	//create an environment called env
+virtualenv --system-site-packages -p python3 env     	//create an environment called env, the doubleflag is mentioned in tensorflow docs.
 source env/bin/activate	       	//start the environment
 source deactivate		//close the environment
 
