@@ -1,2 +1,41 @@
+Links
+- https://towardsdatascience.com/lstm-by-example-using-tensorflow-feb0c1968537
+- https://www.tensorflow.org/guide/low_level_intro
+
+Tensorflow Notes
+- structures
+    - graph's nodes are operations, its edges are the tensors. a graph/model is opened and ran in a session.
+    - create a session and use the 'run' function.
+        - use on an operation to do something to the network, and on a piece of data to run it through the network open in the session
+        - printing a tensor describes the operations that will run
+            - operation followed by an output index, e.g. add:0
+    - tensor = basically item that holds data in an arbitrary amount of dimensions (think of them in terms of how many things are in each thing, iteratively)
+    - placeholders = like function args, how data passes in.
+    - Datasets = ways to hold and slice up data (usually from python array)
+        - usually involves itorators
+    - Layers = input vector -> single value. 
+        - must be created and initialized with values, using a OPERATION (tf.global_variables_initializer())
+        - there are shortcut functions that allow us to create and initialize in the same function call.
+- 2 parts, creating then running the model
+- use tensorboard for a view of the network (link above)
+- some functions that have come up and might be interesting later
+    - tf.reshape(item, dimension) = reshapes item into a new format given by dimension. similar to making matrices in R
+    - tf.split(...) = used to split up data, usually into individual entries from a big array
+    - tf.contrib.rnn.BasicLSTMCell(n_hidden) = just one type of cell, not really sure whats special about it
+- Some basic workflow
+    - define data in terms of a featureset 
+    - create your inputs (usually of tf.constant)
+        - is linked to model in model's constructor
+    - create a model (usually involving some sort of internal layer (possibly of dense type))
+    - evaluation can be done by sess.run the completed model
+    - train it  
+        - define loss function (ex tf.losses.mean_squared_error()). it takes values for loss calculation and is pretty straightforward
+        - use an optimizer (gradient descent: tf.train.GradientDescentOptimizer)
+        - training typically looped using just the minimizer and the loss. The loss is where the model is referenced and changed from
+            - probably will receive a loss value (in a tuple) from the running that can be printed to see updates
+
+
+
+General Notes
 - LSTM nodes intake only integer values. We can make a mapping via a dictionary to pass it non-numeric numbers.
 - 
