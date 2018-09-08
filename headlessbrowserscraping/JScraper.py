@@ -2,6 +2,9 @@
 # @desc A "Jscraper" web scraper ADT that runs a selenium instance headless or headed to drive chrome or firefox.
 
 import json
+import selenium
+from selenium.webdriver.firefox.options import Options
+from selenium import webdriver   
 import sqlite3
 import sys
 
@@ -24,6 +27,7 @@ class JScraper:
     __currencyTypes = []
     __targets = None
     __connection = None
+    __webdriver = None
 
     def __initTargets(self, file): #load scrape locations from json as array of Targets
         data = None
@@ -50,10 +54,27 @@ class JScraper:
                 pass
         self.__connection = connection
 
+    def __initWebdriver(self, browser_type, browser_driverpath, browser_isheadless):
+        if browser_type == "firefox":
+            ffox_options = Options()
+            if browser_isheadless:
+                ffox_options.add_argument("--headless")
+            self.__webdriver = webdriver.Firefox(firefox_options=ffox_options, executable_path=browser_driverpath)
+        else: #default to chrome
+            chrome_options = webdriver.ChromeOptions()
+            if browser_isheadless:
+                chrome_options.add_argument("--headless")
+            self.__webdriver = webdriver.Chrome(browser_driverpath, chrome_options=chrome_options)
     #public
-    def __init__(self, jsonfile="directory.json", dtbfile="./databases/jscraper.db", logfile="log.txt"):
+    def __init__(self, jsonfile="directory.json", 
+                    dtbfile="./databases/jscraper.db", 
+                    logfile="log.txt",
+                    browser_type="firefox",
+                    browser_driverpath="./browserdrivers/geckodriver",
+                    browser_isheadless=True):
         self.__initTargets(jsonfile)
         self.__initDatabase(dtbfile)
+        self.__initWebdriver(browser_type, browser_driverpath, browser_isheadless)
 
     def printTargets(self):
         for target in self.__targets:
@@ -73,6 +94,6 @@ class JScraper:
     def scrape(self):
         pass
 
-scpr = JScraper()
+scpr = JScraper(browser_type="chrome", browser_driverpath="./browserdrivers/chromedriver",browser_isheadless=False)
 scpr.printCurrencies()
 scpr.printTargets()
