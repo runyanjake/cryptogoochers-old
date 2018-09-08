@@ -23,8 +23,9 @@ class JScraper:
     #private
     __currencyTypes = []
     __targets = None
+    __connection = None
 
-    def __loadTargets(self, file): #load scrape locations from json as array of Targets
+    def __initTargets(self, file): #load scrape locations from json as array of Targets
         data = None
         self.__targets = []
         try:
@@ -37,7 +38,7 @@ class JScraper:
         except(IOError):
             raise JScraperException("Specified JSON file " + str(file) + " does not exist.")
 
-    def __loadDatabase(self, dtbfile):
+    def __initDatabase(self, dtbfile):
         #requires targets to be loaded so currencyTypes exists.
         connection = sqlite3.connect(dtbfile)
         for currency in self.__currencyTypes:
@@ -47,11 +48,12 @@ class JScraper:
                         ''' (currency text, date timestamp, median_price real, hi_price real, hi_price_site text, lo_price real, lo_price_site text)''')
             except sqlite3.OperationalError:
                 pass
+        self.__connection = connection
 
     #public
     def __init__(self, jsonfile="directory.json", dtbfile="./databases/jscraper.db", logfile="log.txt"):
-        self.__loadTargets(jsonfile)
-        self.__loadDatabase(dtbfile)
+        self.__initTargets(jsonfile)
+        self.__initDatabase(dtbfile)
 
     def printTargets(self):
         for target in self.__targets:
