@@ -29,6 +29,7 @@ class JScraper:
     __targets = None
     __connection = None
     __webdriver = None
+    __log = None
 
     def __initTargets(self, file): #load scrape locations from json as array of Targets
         data = None
@@ -69,6 +70,15 @@ class JScraper:
             self.__webdriver = webdriver.Chrome(browser_driverpath, chrome_options=chrome_options)
         self.__webdriver.set_page_load_timeout(30)
 
+    def __initLog(self):
+        try:
+            self.__log = open("log.txt", 'w')
+        except:
+            self.__log = None
+
+    def __makeLogEntry(self, entry):
+        if not(self.__log == None):
+            self.__log.write(entry)
 
     def __renderProgressBar(self, x, y, width):
         msg = "\rJScraper progress: ["
@@ -92,6 +102,7 @@ class JScraper:
         self.__initTargets(jsonfile)
         self.__initDatabase(dtbfile)
         self.__initWebdriver(browser_type, browser_driverpath, browser_isheadless)
+        self.__initLog()
 
     #deconstructor used to close things the program was using
     #it's generally not recommended to do this in Python
@@ -101,6 +112,8 @@ class JScraper:
         self.__targets = None
         self.__webdriver.quit()
         self.__connection.close()
+        if not(self.__log == None):
+            self.__log.close()
 
     #scrapes data from all targets, returns a dictionary containing scraped values sorted by ticker
     def scrape(self, currency="ALL", iterations=1 ,num_attempts=10):
@@ -116,53 +129,53 @@ class JScraper:
                             finished_scraping = False
                             num_reattempts = num_attempts
                             while not finished_scraping:
-                                # print("\t Attempting " + str(target.url) + "...")
+                                self.__makeLogEntry("\t Attempting " + str(target.url) + "...\n")
                                 try:
-                                    # print("\tScraping " + str(target.url) + "...")
+                                    self.__makeLogEntry("\tScraping " + str(target.url) + "...\n")
                                     self.__webdriver.get(target.url)
                                     value_element = self.__webdriver.find_element_by_xpath(target.xpath)
                                     value_str = value_element.text
                                     if value_str == "" or value_str == None:
-                                        # print("\tFailed to parse a string from the webpage. Retrying... (" + str(num_reattempts) + " attempts left)")
+                                        self.__makeLogEntry("\tFailed to parse a string from the webpage. Retrying... (" + str(num_reattempts) + " attempts left)\n")
                                         num_reattempts = num_reattempts-1
                                         if num_reattempts > 0:
                                             finished_scraping = False
                                         else:
-                                            # print("\tFailed to parse a string from the webpage. Continuing...")
+                                            self.__makeLogEntry("\tFailed to parse a string from the webpage. Continuing...\n")
                                             value = -1.0
                                             finished_scraping = True
                                     else:
                                         value = float(re.search("[0-9,]+\.[0-9]+|[0-9,]+", value_str).group(0).replace(",", ""))
                                         currency_valueset.append(value)
-                                        # print("\tSuccess. Found BTC price " + str(value) + ".")
+                                        self.__makeLogEntry("\tSuccess. Found BTC price " + str(value) + ".\n")
                                         finished_scraping = True
                                 except selenium.common.exceptions.NoSuchElementException:
-                                    # print("\tFailed to parse a string from the webpage. Retrying... (" + str(num_reattempts) + " attempts left)")
+                                    self.__makeLogEntry("\tFailed to parse a string from the webpage. Retrying... (" + str(num_reattempts) + " attempts left)\n")
                                     num_reattempts = num_reattempts-1
                                     if num_reattempts > 0:
                                         finished_scraping = False
                                     else:
-                                        # print("\tFailed to parse a string from the webpage. Continuing...")
+                                        self.__makeLogEntry("\tFailed to parse a string from the webpage. Continuing...\n")
                                         value = -1.0
                                         finished_scraping = True
                                 except selenium.common.exceptions.TimeoutException:
-                                    # print("\tConnection failed after 30 seconds... (" + str(num_reattempts) + " attempts left)")
+                                    self.__makeLogEntry("\tConnection failed after 30 seconds... (" + str(num_reattempts) + " attempts left)\n")
                                     num_reattempts = num_reattempts-1
                                     if num_reattempts > 0:
                                         finished_scraping = False
                                     else:
-                                        # print("\tFailed to parse a string from the webpage. Continuing...")
+                                        self.__makeLogEntry("\tFailed to parse a string from the webpage. Continuing...\n")
                                         value = -1.0
                                         finished_scraping = True
 
                                 except:
-                                    # print("\tError: Connection to " + str(target.url) + " failed. Skipping it for now.")
+                                    self.__makeLogEntry("\tError: Connection to " + str(target.url) + " failed. Skipping it for now.\n")
                                     finished_scraping = True
                             completed = completed + 1
                             self.__renderProgressBar(completed, len(self.__targets), 20)
-                    # print("Scraped " + currency_tkr + " To get values: " + str(currency_valueset))
+                    self.__makeLogEntry("Scraped " + currency_tkr + " To get values: " + str(currency_valueset) + "\n")
                     results[currency_tkr] = currency_valueset
-        sys.stdout.write("\n")
+        sys.stdout.write("\n") #for the progress bar
         return results
 
     def printTargets(self):
