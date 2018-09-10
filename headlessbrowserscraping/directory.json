@@ -1,5 +1,4 @@
 {"BTC": [
-    {"url": "https://cointelegraph.com/bitcoin-price-index", "xpath": "//div[@class='value text-nowrap']"}, 
     {"url": "https://coinmarketcap.com/currencies/bitcoin/", "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"}, 
     {"url": "https://bitcoincharts.com/markets/coinbaseUSD.html", "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"}, 
     {"url": "https://bitcoincharts.com/markets/bitstampUSD.html", "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"}, 

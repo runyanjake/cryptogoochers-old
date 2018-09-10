@@ -2,6 +2,7 @@
 # @desc A "Jscraper" web scraper ADT that runs a selenium instance headless or headed to drive chrome or firefox.
 
 import json
+import re
 import selenium
 from selenium.webdriver.firefox.options import Options
 from selenium import webdriver   
@@ -66,7 +67,22 @@ class JScraper:
             if browser_isheadless:
                 chrome_options.add_argument("--headless")
             self.__webdriver = webdriver.Chrome(browser_driverpath, chrome_options=chrome_options)
+        self.__webdriver.set_page_load_timeout(30)
+
+
+    def __renderProgressBar(self, x, y, width):
+        msg = "\rJScraper progress: ["
+        barsize = round(width * (x / y))
+        for a in range(barsize):
+            msg = msg + "="
+        for a in range(barsize,width):
+            msg = msg + " "
+        msg = msg + "] " + str(x) + "\\" + str(y)
+        sys.stdout.write(msg)
+        pass
+
     #public
+    #default constructor, with a few configurable options
     def __init__(self, jsonfile="directory.json", 
                     dtbfile="./databases/jscraper.db", 
                     logfile="log.txt",
@@ -77,52 +93,77 @@ class JScraper:
         self.__initDatabase(dtbfile)
         self.__initWebdriver(browser_type, browser_driverpath, browser_isheadless)
 
+    #deconstructor used to close things the program was using
+    #it's generally not recommended to do this in Python
+    #invoked when all references are deleted or del keyword used
+    def __del__(self):
+        self.__currencyTypes = None
+        self.__targets = None
+        self.__webdriver.quit()
+        self.__connection.close()
+
+    #scrapes data from all targets, returns a dictionary containing scraped values sorted by ticker
     def scrape(self, currency="ALL", iterations=1 ,num_attempts=10):
+        results = {}
         for i in range(iterations):
-            if currency == "ALL":
-                for currency_tkr in self.__currencyTypes:
+            completed = 0
+            self.__renderProgressBar(completed, len(self.__targets), 20)
+            for currency_tkr in self.__currencyTypes:
+                if(currency_tkr == currency or currency == "ALL"):
                     currency_valueset = []
                     for target in self.__targets:
                         if target.ticker == currency_tkr:
                             finished_scraping = False
                             num_reattempts = num_attempts
                             while not finished_scraping:
-                                print("\t Attempting " + str(target.url) + "...")
+                                # print("\t Attempting " + str(target.url) + "...")
                                 try:
-                                    print("\tScraping " + str(target.url) + "...")
+                                    # print("\tScraping " + str(target.url) + "...")
                                     self.__webdriver.get(target.url)
                                     value_element = self.__webdriver.find_element_by_xpath(target.xpath)
                                     value_str = value_element.text
                                     if value_str == "" or value_str == None:
-                                        print("\tFailed to parse a string from the webpage. Retrying... (" + str(num_reattempts) + " attempts left)")
+                                        # print("\tFailed to parse a string from the webpage. Retrying... (" + str(num_reattempts) + " attempts left)")
                                         num_reattempts = num_reattempts-1
                                         if num_reattempts > 0:
                                             finished_scraping = False
                                         else:
-                                            print("\tFailed to parse a string from the webpage. Continuing...")
-                                            value = -1.0 #error value, most likely never used
-                                            finished_scraping = True #loop control, dont mean anything
+                                            # print("\tFailed to parse a string from the webpage. Continuing...")
+                                            value = -1.0
+                                            finished_scraping = True
                                     else:
-                                        #Regex will recognize strings with a decimal or integer number, with or without commas denoting thousands.
                                         value = float(re.search("[0-9,]+\.[0-9]+|[0-9,]+", value_str).group(0).replace(",", ""))
-                                        BTC_PRICES.append(value)
-                                        print("\tSuccess. Found BTC price " + str(value) + ".")
+                                        currency_valueset.append(value)
+                                        # print("\tSuccess. Found BTC price " + str(value) + ".")
                                         finished_scraping = True
                                 except selenium.common.exceptions.NoSuchElementException:
-                                    print("\tFailed to parse a string from the webpage. Retrying... (" + str(num_reattempts) + " attempts left)")
+                                    # print("\tFailed to parse a string from the webpage. Retrying... (" + str(num_reattempts) + " attempts left)")
                                     num_reattempts = num_reattempts-1
                                     if num_reattempts > 0:
                                         finished_scraping = False
                                     else:
-                                        print("\tFailed to parse a string from the webpage. Continuing...")
-                                        value = -1.0 #error value, most likely never used
-                                        finished_scraping = True #loop control, dont mean anything
-                                except:
-                                    print("\tError: Connection to " + str(target.url) + " failed. Skipping it for now.")
-                                    finished_scraping = True
+                                        # print("\tFailed to parse a string from the webpage. Continuing...")
+                                        value = -1.0
+                                        finished_scraping = True
+                                except selenium.common.exceptions.TimeoutException:
+                                    # print("\tConnection failed after 30 seconds... (" + str(num_reattempts) + " attempts left)")
+                                    num_reattempts = num_reattempts-1
+                                    if num_reattempts > 0:
+                                        finished_scraping = False
+                                    else:
+                                        # print("\tFailed to parse a string from the webpage. Continuing...")
+                                        value = -1.0
+                                        finished_scraping = True
 
-            else: #scrape one specific currency's sources
-                pass
+                                except:
+                                    # print("\tError: Connection to " + str(target.url) + " failed. Skipping it for now.")
+                                    finished_scraping = True
+                            completed = completed + 1
+                            self.__renderProgressBar(completed, len(self.__targets), 20)
+                    # print("Scraped " + currency_tkr + " To get values: " + str(currency_valueset))
+                    results[currency_tkr] = currency_valueset
+        sys.stdout.write("\n")
+        return results
 
     def printTargets(self):
         for target in self.__targets:
@@ -138,5 +179,6 @@ class JScraper:
         return self.__currencyTypes
 
 scpr = JScraper(browser_isheadless=False)
-print(scpr)
-scpr.scrape()
+results = scpr.scrape()
+print(results)
+del scpr
