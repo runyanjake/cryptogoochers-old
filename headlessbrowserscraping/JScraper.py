@@ -1,6 +1,7 @@
 # @author Jake Runyan
 # @desc A "Jscraper" web scraper ADT that runs a selenium instance headless or headed to drive chrome or firefox.
 
+import datetime
 import json
 import re
 import selenium
@@ -52,9 +53,10 @@ class JScraper:
             tablename = currency + "prices"
             try:
                 connection.execute('''CREATE TABLE ''' + str(tablename) + 
-                        ''' (currency text, date timestamp, median_price real, hi_price real, hi_price_site text, lo_price real, lo_price_site text)''')
+                        ''' (currency text, date timestamp, median_price real, median_price_site text, hi_price real, hi_price_site text, lo_price real, lo_price_site text)''')
+                self.__makeLogEntry(str(tablename) + " table was created.\n")
             except sqlite3.OperationalError:
-                pass
+                self.__makeLogEntry(str(tablename) + " table verified.\n")
         self.__connection = connection
 
     def __initWebdriver(self, browser_type, browser_driverpath, browser_isheadless):
@@ -116,6 +118,7 @@ class JScraper:
             self.__log.close()
 
     #scrapes data from all targets, returns a dictionary containing scraped values sorted by ticker
+    #NOTE: uses a regex to parse strings so needs modification for non-numerics
     def scrape(self, currency="ALL", iterations=1 ,num_attempts=10):
         results = {}
         for i in range(iterations):
@@ -146,7 +149,7 @@ class JScraper:
                                             finished_scraping = True
                                     else:
                                         value = float(re.search("[0-9,]+\.[0-9]+|[0-9,]+", value_str).group(0).replace(",", ""))
-                                        currency_valueset.append(value)
+                                        currency_valueset.append((value, target.url))
                                         self.__makeLogEntry("\tSuccess. Found BTC price " + str(value) + ".\n")
                                         finished_scraping = True
                                 except selenium.common.exceptions.NoSuchElementException:
@@ -178,6 +181,39 @@ class JScraper:
         sys.stdout.write("\n") #for the progress bar
         return results
 
+    #recieves data as array of (value, url) pairs 
+    def recordData(self, data):
+        if not(data == None) and len(data) > 0:
+            for currency_type in data:
+                data_list = data[currency_type]
+                data_list_inorder = sorted(data_list)
+                median_price = -1.0
+                median_price_site = None
+                lo_price = data_list_inorder[0][0]
+                lo_price_site = data_list_inorder[0][1]
+                hi_price = data_list_inorder[len(data_list_inorder)-1][0]
+                hi_price_site = data_list_inorder[len(data_list_inorder)-1][1]
+                while len(data_list_inorder) > 2:
+                    del data_list_inorder[0]
+                    del data_list_inorder[len(data_list_inorder)-1]
+                if len(data_list_inorder) == 2:
+                    median_price = (data_list_inorder[0][0] + data_list_inorder[1][0]) / 2.0
+                    median_price_site = data_list_inorder[1][1]
+                else: #is 1
+                    median_price = data_list_inorder[0][0]
+                    median_price_site = data_list_inorder[0][1]
+                self.__makeLogEntry("For " + str(currency_type) + "  low price: " + str(lo_price) + " at " + str(lo_price_site) + "  median price: " + str(median_price) + " at " + str(median_price_site) + "  hi price: " + str(hi_price) + " at " + str(hi_price_site) + "\n")
+                tablename = currency_type + "prices"
+                # try:
+                prepstmt = "INSERT INTO " + str(tablename) + " VALUES ('" + str(currency_type) + "','"  + str(datetime.datetime.utcnow()) + "'," + str(median_price) + ",'" + str(median_price_site) + "'," + str(hi_price) + ",'" + str(hi_price_site) + "',"  + str(lo_price) + ",'" + str(lo_price_site) + "')" 
+                self.__connection.execute(prepstmt)
+                self.__connection.commit()
+                # except:
+                #     print("AN ERROR WAS HANDLED DURING DATABASE ENTRY")
+
+    def renderGraph(self, name="graph.png", currency="ALL", mode="MEDIAN"):
+        pass
+
     def printTargets(self):
         for target in self.__targets:
             print(target)
@@ -193,5 +229,6 @@ class JScraper:
 
 scpr = JScraper(browser_isheadless=False)
 results = scpr.scrape()
-print(results)
+scpr.recordData(results)
+
 del scpr
