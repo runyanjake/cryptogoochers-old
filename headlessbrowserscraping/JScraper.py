@@ -276,8 +276,10 @@ class JScraper:
     def getCurrencies(self):
         return self.__currencyTypes
 
-scpr = JScraper(browser_isheadless=False)
-# results = scpr.scrape()
-# scpr.recordData(results)
-scpr.renderGraph()
-del scpr
+#If running as a script.
+if __name__ == "__main__":
+    scpr = JScraper(browser_isheadless=False)
+    results = scpr.scrape()
+    scpr.recordData(results)
+    scpr.renderGraph()
+    del scpr
