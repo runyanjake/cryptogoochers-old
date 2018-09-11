@@ -3,6 +3,11 @@
 
 import datetime
 import json
+import matplotlib as mpl
+mpl.use('TkAgg')
+import matplotlib.dates as mdates
+import matplotlib.pyplot as plt
+from matplotlib import ticker
 import re
 import selenium
 from selenium.webdriver.firefox.options import Options
@@ -10,6 +15,7 @@ from selenium import webdriver
 import sqlite3
 import sys
 
+#target class encapsulating crypto type, url, and xpath to value
 class Target:
     ticker = ""
     url = ""
@@ -21,6 +27,7 @@ class Target:
     def __str__(self):
         return ("{" + str(self.ticker) + " | " + str(self.url) + " | " + str(self.xpath) + "}")
 
+#exception type for creating a special exception with a string
 class JScraperException(Exception):
     pass
 
@@ -181,7 +188,7 @@ class JScraper:
         sys.stdout.write("\n") #for the progress bar
         return results
 
-    #recieves data as array of (value, url) pairs 
+    #recieves data as array of (value, url) pairs and records it into the database
     def recordData(self, data):
         if not(data == None) and len(data) > 0:
             for currency_type in data:
@@ -211,8 +218,50 @@ class JScraper:
                 # except:
                 #     print("AN ERROR WAS HANDLED DURING DATABASE ENTRY")
 
-    def renderGraph(self, name="graph.png", currency="ALL", mode="MEDIAN"):
-        pass
+    #requires a connection to be defined
+    def renderGraph(self, currency="ALL", mode="MEDIAN"):
+        for curr in self.__currencyTypes:
+            if(curr == currency or currency == "ALL"):
+                dates = []
+                medians = []
+                hi_vals = []
+                lo_vals = []
+                itor = 1
+                tablename = curr + "prices"
+                for row in self.__connection.execute("SELECT * FROM " + str(tablename) + " ORDER BY date DESC"):
+                    dates.insert(0,row[1])
+                    medians.insert(0,row[2])
+                    hi_vals.insert(0,row[4])
+                    lo_vals.insert(0,row[6])
+                    itor = itor + 1
+
+                print("NUMBER OF DATABASE ITEMS GRABBED: " + str(len(dates)))
+
+                pricingfilepath = "output/" + tablename
+                medianfilepath = pricingfilepath +  "_median"
+
+                #hopefully controlls the number of ticks on the x axis
+                xticks = ticker.MaxNLocator(20)
+
+                fig1, ax = plt.subplots( nrows=1, ncols=1)  # create figure & 1 axis
+                ax.plot(dates, medians, label="Median")
+                ax.xaxis.set_major_locator(xticks) #set number of ticks on plot
+                plt.setp(ax.xaxis.get_majorticklabels(), rotation=270) #rotate labels
+                plt.tight_layout() #make room for lablels
+                fig1.savefig(medianfilepath+'.png', dpi=1000)   # save the figure to file
+                plt.close(fig1)
+
+                fig2, ax = plt.subplots( nrows=1, ncols=1)  # create figure & 1 axis
+                ax.plot(dates, medians, label="Median")
+                ax.plot(dates, hi_vals, label="High Value")
+                ax.plot(dates, lo_vals, label="Low Value")
+                ax.xaxis.set_major_locator(xticks) #set number of ticks on plot
+                plt.setp(ax.xaxis.get_majorticklabels(), rotation=270) #rotate labels
+                plt.tight_layout() #make room for lablels
+                fig2.savefig(pricingfilepath+'.png', dpi=1000)   # save the figure to file
+                plt.close(fig2)
+
+                print("Done.")
 
     def printTargets(self):
         for target in self.__targets:
@@ -228,7 +277,7 @@ class JScraper:
         return self.__currencyTypes
 
 scpr = JScraper(browser_isheadless=False)
-results = scpr.scrape()
-scpr.recordData(results)
-
+# results = scpr.scrape()
+# scpr.recordData(results)
+scpr.renderGraph()
 del scpr
