@@ -1,6 +1,15 @@
 # @author Jake Runyan
 # @desc A "Jscraper" web scraper ADT that runs a selenium instance headless or headed to drive chrome or firefox.
 
+
+
+#AUTHORS NOTE: THIS FILE HAS BEEN SINCE MOVED TO ITS OWN PROJECT, at https://github.com/runyanjake/JScraper
+#THIS VERSION OF THE FILE IS OLD
+
+
+
+
+
 import datetime
 import json
 import matplotlib as mpl
