@@ -1,7 +1,7 @@
 {
-    "cashpool_amt": 2750,
+    "cashpool_amt": 2742.402860000001,
     "portfolio": {
-        "BTC": 0,
+        "BTC": 0.0,
         "ETH": 8350,
         "ADA": 100,
         "EOS": 2500

@@ -1,4 +1,6 @@
 ===== Environment Notes ===== 
+IMPORTANT
+    must copy JScraper.py into this folder so it can be imported. Find it at https://github.com/runyanjake/JScraper
 General
     virtualenv -p python3 env     	//create an environment called env
     source env/bin/activate	       	//start the environment

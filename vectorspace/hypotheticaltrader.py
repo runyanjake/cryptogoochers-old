@@ -2,6 +2,7 @@
 # @desc A hypothetical trader that unit tests a variety of VectorSpaces' new APIs to see if using those as margins to trade is worth it.
 
 import ccxt 
+from JScraper import JScraper # https://github.com/runyanjake/JScraper
 import json
 import sys
 
@@ -108,8 +109,10 @@ class Portfolio:
     #purchase some amount of a specified currency
     def purchase(self, ticker, amt):
         #TODO: checkout ccxt https://github.com/ccxt/ccxt for selling to a bunch of markets
-        #determine best market, connect to it
-        price_per_share = 1 #0.0000000001
+        #determine best market, connect to it (FOR NOW, USING THE LAST LOW SCRAPED VALUE)
+        scpr = JScraper()
+        price_per_share = scpr.retrieveLows(curr=ticker)[0]
+        print("PRICE PER SHARE: " + str(price_per_share))
         #facilitate trade
         if(price_per_share * amt > self.__cashpool_amt):
             raise PortfolioException("Not enough in cashpool to purchase " + str(amt) + " of " + str(ticker) + ".")
@@ -135,27 +138,27 @@ class Portfolio:
             raise PortfolioException("Portfolio does not contain any coins of the type " + str(ticker) + ".")
         #update hardcopy portfolio
 
-#main method, unit testing
+#main imethod, unit testing
 if __name__ == "__main__":
     p = Portfolio("portfolio.pf")
     # Portfolio.generatePortfolio("./port.pf", 11111, "Jake Runyan", {"BTC" : 9000, "ETH" : 200}, 100)
     # p2 = Portfolio("./port.pf")
-    print("Testing 3 bad cases....")
-    try:
-        p.purchase("BTC", 100000000)
-    except(PortfolioException):
-        print("Exception caught successfully.")
-    try:
-        p.sell("BTC", 10000000)
-    except(PortfolioException):
-        print("Exception caught successfully.")
-    try:
-        p.sell("NONEXISTANT", 1)
-    except(PortfolioException):
-        print("Exception caught successfully.")
+
+    # print("Testing 3 bad cases....")
+    # try:
+    #     p.purchase("BTC", 100000000)
+    # except(PortfolioException):
+    #     print("Exception caught successfully.")
+    # try:
+    #     p.sell("BTC", 10000000)
+    # except(PortfolioException):
+    #     print("Exception caught successfully.")
+    # try:
+    #     p.sell("NONEXISTANT", 1)
+    # except(PortfolioException):
+    #     print("Exception caught successfully.")
 
     print(p)
-    p.sell("BTC", 50)
-    p.sell("ETH", 75)
+    p.purchase("BTC", 0.01)
     print(p)
     p.save()
