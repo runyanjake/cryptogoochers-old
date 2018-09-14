@@ -82,14 +82,20 @@ class Portfolio:
         return mystr
 
     #uses JScraper to retrive current values and compute worth of portfolio
+    #CALCULATED BY MEDIAN AMOUNT
     def worth(self):
         if self.__portfolio is None:
             raise PortfolioException("Corrupted portfolio: No Portfolio")
         else:
             #TODO: make JScraper able to report latest price and use it to calculate data
-            return 
+            scpr = JScraper()
+            total = 0.0
+            for ticker in self.__portfolio:
+                price_per_share = scpr.retrieveMedians(curr=ticker)[0]
+                total = total + price_per_share * self.__portfolio[ticker]
+            return total
 
-    #returns the amount of each coin held by the portfolio
+    #returns the amount of each coin held by the portfolio.
     def amount(self, ticker):
         if ticker in self.__portfolio:
             return self.__portfolio[ticker]
@@ -109,10 +115,10 @@ class Portfolio:
     #purchase some amount of a specified currency
     def purchase(self, ticker, amt):
         #TODO: checkout ccxt https://github.com/ccxt/ccxt for selling to a bunch of markets
-        #determine best market, connect to it (FOR NOW, USING THE LAST LOW SCRAPED VALUE)
+        #determine best market, connect to it
+        #CALCULATED BY MEDIAN AMOUNT
         scpr = JScraper()
-        price_per_share = scpr.retrieveLows(curr=ticker)[0]
-        print("PRICE PER SHARE: " + str(price_per_share))
+        price_per_share = scpr.retrieveMedians(curr=ticker)[0]
         #facilitate trade
         if(price_per_share * amt > self.__cashpool_amt):
             raise PortfolioException("Not enough in cashpool to purchase " + str(amt) + " of " + str(ticker) + ".")
@@ -127,7 +133,9 @@ class Portfolio:
     def sell(self, ticker, amt):
         #TODO: checkout ccxt https://github.com/ccxt/ccxt for selling to a bunch of markets
         #determine best market, connect to it
-        price_per_share = 1 #0.0000000001
+        #CALCULATED BY MEDIAN AMOUNT
+        scpr = JScraper()
+        price_per_share = scpr.retrieveMedians(curr=ticker)[0]
         #facilitate trade
         if ticker in self.__portfolio:
             if amt > self.__portfolio[ticker]:
@@ -159,6 +167,9 @@ if __name__ == "__main__":
     #     print("Exception caught successfully.")
 
     print(p)
+    print("Total Worth: " + str(p.worth()))
     p.purchase("BTC", 0.01)
     print(p)
+    print("Total Worth: " + str(p.worth()))
+    print("BTC " + str(p.amount("BTC")))
     p.save()
