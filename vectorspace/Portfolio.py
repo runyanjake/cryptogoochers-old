@@ -81,15 +81,23 @@ class Portfolio:
         mystr = mystr + "} with an idle cashpool amount of " + str(self.__cashpool_amt) + ".\n"
         return mystr
 
+    #a getter for portfolio contents
+    def getPortfolio(self):
+        return self.__portfolio
+
+    #a getter for portfolio cashpool
+    def getCashpool(self):
+        return self.__cashpool_amt
+
     #uses JScraper to retrive current values and compute worth of portfolio
     #CALCULATED BY MEDIAN AMOUNT
-    def worth(self):
+    def getWorth(self):
         if self.__portfolio is None:
             raise PortfolioException("Corrupted portfolio: No Portfolio")
         else:
             #TODO: make JScraper able to report latest price and use it to calculate data
             scpr = JScraper()
-            total = 0.0
+            total = self.__cashpool_amt
             for ticker in self.__portfolio:
                 price_per_share = scpr.retrieveMedians(curr=ticker)[0]
                 total = total + price_per_share * self.__portfolio[ticker]
@@ -128,6 +136,7 @@ class Portfolio:
             self.__portfolio[ticker] = amt
         self.__cashpool_amt = self.__cashpool_amt - (amt * price_per_share)
         #update hardcopy portfolio
+        self.save()
 
     #sell some amount of a specified currency
     def sell(self, ticker, amt):
@@ -145,6 +154,7 @@ class Portfolio:
         else:
             raise PortfolioException("Portfolio does not contain any coins of the type " + str(ticker) + ".")
         #update hardcopy portfolio
+        self.save()
 
 #main imethod, unit testing
 if __name__ == "__main__":
@@ -167,9 +177,9 @@ if __name__ == "__main__":
     #     print("Exception caught successfully.")
 
     print(p)
-    print("Total Worth: " + str(p.worth()))
+    print("Total Worth: " + str(p.getWorth()))
     p.purchase("BTC", 0.01)
     print(p)
-    print("Total Worth: " + str(p.worth()))
+    print("Total Worth: " + str(p.getWorth()))
     print("BTC " + str(p.amount("BTC")))
     p.save()

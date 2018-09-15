@@ -1,10 +1,10 @@
 {
-    "cashpool_amt": 873.3610000000001,
+    "cashpool_amt": 6558.592170948315,
     "portfolio": {
-        "BTC": 1.02,
-        "ETH": 2.5,
-        "ADA": 600,
-        "EOS": 190
+        "BTC": 0.0,
+        "ETH": 8.598662916142047,
+        "ADA": 0,
+        "EOS": 309.36267623204634
     },
     "portfolio_id": 101010101,
     "portfolio_owner": "Jake Runyan"
