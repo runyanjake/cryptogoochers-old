@@ -110,4 +110,4 @@ def strategy2():
 #since a lot of these methods will be created dont
 #use multithreading just run the program a bunch of times
 if __name__ == "__main__":
-    strategy1()
+    strategy2()

@@ -161,6 +161,8 @@ class Portfolio:
         fig1.savefig('./output/' + str(self.__filepath) + '_worth.png', dpi=1000)   # save the figure to file
         plt.close(fig1)
 
+        connection.close()
+
     #purchase some amount of a specified currency
     def purchase(self, ticker, amt):
         #TODO: checkout ccxt https://github.com/ccxt/ccxt for selling to a bunch of markets
