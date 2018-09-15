@@ -3,8 +3,14 @@
 
 import datetime
 import json
+import platform
 import matplotlib as mpl
-mpl.use('TkAgg')
+if platform.system() == "Darwin":
+    mpl.use('TkAgg')
+if platform.system() == "Windows":
+    mpl.use('Agg')
+else: #linux
+    mpl.use('TkAgg')
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 from matplotlib import ticker
