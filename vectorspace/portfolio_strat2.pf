@@ -1,8 +1,8 @@
 {
-    "cashpool_amt": 8100.0,
+    "cashpool_amt": 10000.0,
     "portfolio": {
-        "BTC": 0.2916694755231144
+        "BTC": 0
     },
     "portfolio_id": 101010101,
-    "portfolio_owner": "Jake Runyan"
+    "portfolio_owner": "BTC Only Profile"
 }
