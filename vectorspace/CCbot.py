@@ -39,14 +39,14 @@ if __name__ == "__main__":
                 purchase_price = curr_median
                 shares = purchase_amt / purchase_price
                 p.purchase(curr, shares)
-                print("Buying " + str(shares) + " of " + str(curr) + " at " + str(curr_median) + "(Total price " + str(purchase_price) + ").")
+                print("Buying " + str(shares) + " of " + str(curr) + " at " + str(curr_median) + "(Total price " + str(shares * purchase_price) + ").")
             elif(mean_of_median > curr_median):
                 share_ct = p.amount(curr)
                 if not(share_ct == -1 or share_ct <= 0.0):
                     sell_ct = MAX_PERCENT_ALLOWANCE * p.share_ct
                     purchase_price = curr_median
                     p.sell(curr, sell_ct)
-                    print("Selling " + str(shares) + " of " + str(curr) + " at " + str(curr_median) + "(Total price " + str(purchase_price) + ").")
+                    print("Selling " + str(sell_ct) + " of " + str(curr) + " at " + str(curr_median) + "(Total price " + str(sell_ct * purchase_price) + ").")
             else: #if price constant, do nothing
                 pass
 
