@@ -143,8 +143,8 @@ class Portfolio:
         dates = []
         totals = []
         for row in connection.execute("SELECT * FROM totalWorth ORDER BY date DESC"):
-                    totals.append(row[0])
-                    dates.append(row[1])
+                    totals.insert(0,row[0])
+                    dates.insert(0,row[1])
 
         xticks = ticker.MaxNLocator(20)
         fig1, ax = plt.subplots( nrows=1, ncols=1)  # create figure & 1 axis

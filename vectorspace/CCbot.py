@@ -6,6 +6,7 @@ from Portfolio import Portfolio
 import time
 
 TIME_BETWEEN_ITERATIONS = 900 #15min
+LOOKBACK_LENGTH = 10
 
 if __name__ == "__main__":
     scpr = JScraper()
@@ -29,8 +30,12 @@ if __name__ == "__main__":
                 continue #Do nothing until 
             curr_median = lows[0]
             mean_of_median = 0
+            itor = 0
             for l in lows:
-                mean_of_median = mean_of_median + l
+                if itor > LOOKBACK_LENGTH:
+                    break
+                else:
+                    mean_of_median = mean_of_median + l
             mean_of_median = mean_of_median / len(lows)
             print(str(curr) + ": MOst recent median: " + str(curr_median) + "  mean of median: " + str(mean_of_median))
             
