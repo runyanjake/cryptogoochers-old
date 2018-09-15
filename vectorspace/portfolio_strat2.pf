@@ -1,0 +1,8 @@
+{
+    "cashpool_amt": 10000,
+    "portfolio": {
+        "BTC": 0
+    },
+    "portfolio_id": 101010101,
+    "portfolio_owner": "Jake Runyan"
+}
