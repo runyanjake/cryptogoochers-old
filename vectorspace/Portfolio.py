@@ -2,8 +2,15 @@
 # @desc A hypothetical trader that unit tests a variety of VectorSpaces' new APIs to see if using those as margins to trade is worth it.
 
 import ccxt 
+import datetime
 from JScraper import JScraper # https://github.com/runyanjake/JScraper
 import json
+import matplotlib as mpl
+mpl.use('TkAgg')
+import matplotlib.dates as mdates
+import matplotlib.pyplot as plt
+from matplotlib import ticker
+import sqlite3
 import sys
 
 #exception type for creating a special exception with a string
@@ -78,7 +85,7 @@ class Portfolio:
                 first = False
             else:
                 mystr = mystr + ", (" + str(entry) + ", " + str(self.__portfolio[entry]) + ")"
-        mystr = mystr + "} with an idle cashpool amount of " + str(self.__cashpool_amt) + ".\n"
+        mystr = mystr + "} with an idle cashpool amount of " + str(self.__cashpool_amt) + "."
         return mystr
 
     #a getter for portfolio contents
@@ -119,6 +126,34 @@ class Portfolio:
         data['portfolio_owner'] = self.__portfolio_owner
         file = open(self.__filepath, "w+")
         json.dump(data, file, indent=4)
+
+
+        #tmp files 
+        connection = sqlite3.connect("./databases/" + str(self.__filepath) + ".db")
+        try:
+            connection.execute('''CREATE TABLE totalWorth (worth real, date timestamp)''')
+        except sqlite3.OperationalError:
+            pass #already exists
+
+        now = datetime.datetime.utcnow()
+        prepstmt = "INSERT INTO totalWorth VALUES (" + str(self.getWorth()) + ",'" + str(now) + "')" 
+        connection.execute(prepstmt)
+        connection.commit()
+
+        dates = []
+        totals = []
+        for row in connection.execute("SELECT * FROM totalWorth ORDER BY date DESC"):
+                    totals.append(row[0])
+                    dates.append(row[1])
+
+        xticks = ticker.MaxNLocator(20)
+        fig1, ax = plt.subplots( nrows=1, ncols=1)  # create figure & 1 axis
+        ax.plot(dates, totals, label="Totals")
+        ax.xaxis.set_major_locator(xticks) #set number of ticks on plot
+        plt.setp(ax.xaxis.get_majorticklabels(), rotation=270) #rotate labels
+        plt.tight_layout() #make room for lablels
+        fig1.savefig('./output/' + str(self.__filepath) + '_worth.png', dpi=1000)   # save the figure to file
+        plt.close(fig1)
 
     #purchase some amount of a specified currency
     def purchase(self, ticker, amt):

@@ -1,0 +1,58 @@
+{"BTC": [
+    {"url": "https://coinmarketcap.com/currencies/bitcoin/", "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"}, 
+    {"url": "https://bitcoincharts.com/markets/coinbaseUSD.html", "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"}, 
+    {"url": "https://bitcoincharts.com/markets/bitstampUSD.html", "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"}, 
+    {"url": "https://bitcoincharts.com/markets/krakenUSD.html", "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"}, 
+    {"url": "https://bitcoincharts.com/markets/itbitUSD.html", "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"}, 
+    {"url": "https://bitcoincharts.com/markets/coinsbankUSD.html", "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"}, 
+    {"url": "https://bitcoincharts.com/markets/wexUSD.html", "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"}, 
+    {"url": "https://bitcoincharts.com/markets/lakeUSD.html", "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"}, 
+    {"url": "https://bitcoincharts.com/markets/cexUSD.html", "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"}, 
+    {"url": "https://bitcoincharts.com/markets/getbtcUSD.html", "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"}, 
+    {"url": "https://bitcoincharts.com/markets/localbtcUSD.html", "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"}, 
+    {"url": "https://bitcoincharts.com/markets/btcalphaUSD.html", "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"}, 
+    {"url": "https://bitcoincharts.com/markets/okcoinUSD.html", "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"}, 
+    {"url": "https://bitcoincharts.com/markets/bitbayUSD.html", "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"}, 
+    {"url": "https://bitcoincharts.com/markets/bitkonanUSD.html", "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"}, 
+    {"url": "https://coinranking.com/coin/bitcoin-btc", "xpath": "//span[@class='price__price']"}
+    ], 
+"ETH": [
+    {"url": "https://coinmarketcap.com/currencies/ethereum/", "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"}, 
+    {"url": "https://coinranking.com/coin/ethereum-eth", "xpath": "//span[@class='price__price']"}
+    ], 
+"XRP": [
+    {"url": "https://coinmarketcap.com/currencies/ripple/", "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"}, 
+    {"url": "https://coinranking.com/coin/xrp-xrp", "xpath": "//span[@class='price__price']"}
+    ], 
+"EOS": [
+    {"url": "https://coinmarketcap.com/currencies/eos/", "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"}, 
+    {"url": "https://coinranking.com/coin/eos-eos", "xpath": "//span[@class='price__price']"}
+], 
+"XLM": [
+    {"url": "https://coinmarketcap.com/currencies/stellar/", "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"}, 
+    {"url": "https://coinranking.com/coin/stellar-xlm", "xpath": "//span[@class='price__price']"}
+], 
+"LTC": [
+    {"url": "https://coinmarketcap.com/currencies/litecoin/", "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"}, 
+    {"url": "https://coinranking.com/coin/litecoin-ltc", "xpath": "//span[@class='price__price']"}
+], 
+"ADA": [
+    {"url": "https://coinmarketcap.com/currencies/cardano/", "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"}, 
+    {"url": "https://coinranking.com/coin/cardano-ada", "xpath": "//span[@class='price__price']"}
+], 
+"MIOTA": [
+    {"url": "https://coinmarketcap.com/currencies/iota/", "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"}, 
+    {"url": "https://coinranking.com/coin/iota-iot", "xpath": "//span[@class='price__price']"}
+], 
+"TRX": [
+    {"url": "https://coinmarketcap.com/currencies/tron/", "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"}, 
+    {"url": "https://coinranking.com/coin/tron-trx", "xpath": "//span[@class='price__price']"}
+], 
+"USDT": [
+    {"url": "https://coinmarketcap.com/currencies/tether/", "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"}, 
+    {"url": "https://coinranking.com/coin/tether-usdt", "xpath": "//span[@class='price__price']"}
+], 
+"XMR": [
+    {"url": "https://coinmarketcap.com/currencies/monero/", "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"}, 
+    {"url": "https://coinranking.com/coin/monero-xmr", "xpath": "//span[@class='price__price']"}
+    ]}

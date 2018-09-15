@@ -11,6 +11,7 @@ if __name__ == "__main__":
     scpr = JScraper()
     p = Portfolio("portfolio.pf")
 
+
     #scrapes up until a critical pt (num of entries in database >= 200)
     #trades away currency if it has appreciated in value relative to average of medians
     #buys currency that is lower than average of medians
@@ -24,8 +25,8 @@ if __name__ == "__main__":
         # try to intelligently buy
         for curr in myportfolio:
             lows = scpr.retrieveLows(curr=curr, max=200)
-            # if len(lows) < 200:
-            #     continue #Do nothing until 
+            if len(lows) < 10:
+                continue #Do nothing until 
             curr_median = lows[0]
             mean_of_median = 0
             for l in lows:
@@ -43,7 +44,7 @@ if __name__ == "__main__":
             elif(mean_of_median > curr_median):
                 share_ct = p.amount(curr)
                 if not(share_ct == -1 or share_ct <= 0.0):
-                    sell_ct = MAX_PERCENT_ALLOWANCE * p.share_ct
+                    sell_ct = MAX_PERCENT_ALLOWANCE * share_ct
                     purchase_price = curr_median
                     p.sell(curr, sell_ct)
                     print("Selling " + str(sell_ct) + " of " + str(curr) + " at " + str(curr_median) + "(Total price " + str(sell_ct * purchase_price) + ").")
@@ -51,5 +52,5 @@ if __name__ == "__main__":
                 pass
 
         print(p)
-        print("Total worth: " + str(p.getWorth()))
+        print("Total worth: " + str(p.getWorth()) + ".\n")
         time.sleep(TIME_BETWEEN_ITERATIONS) #sec
