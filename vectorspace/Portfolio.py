@@ -12,7 +12,7 @@ if platform.system() == "Darwin":
 if platform.system() == "Windows":
     mpl.use('Agg')
 else: #linux
-    mpl.use('TkAgg')
+    mpl.use('Agg')
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 from matplotlib import ticker
