@@ -9,7 +9,7 @@ import platform
 import matplotlib as mpl
 if platform.system() == "Darwin":
     mpl.use('TkAgg')
-if platform.system() == "Windows":
+elif platform.system() == "Windows":
     mpl.use('Agg')
 else: #linux
     mpl.use('Agg')
