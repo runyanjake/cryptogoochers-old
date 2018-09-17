@@ -103,6 +103,20 @@ def strategy2():
         print("Total worth: " + str(p.getWorth()) + ".\n")
         time.sleep(TIME_BETWEEN_ITERATIONS) #sec
 
+#uses significance to determine whether or not to buy.
+def strategy3():
+    #TODO
+
+# trying to use the vectorspace things to guide what i choose
+def strategy4():
+    import requests
+    import json
+    API_ENDPOINT = "https://vectorspace.ai/recommend/app/correlated_cryptos"
+    data = {"query" : "machine+learning&vxv_token_addr=0xC2A568489BF6AAC5907fa69f8FD4A9c04323081D"}
+    r = requests.post(url = API_ENDPOINT, data = data)
+    rec = json.loads(r.text)
+    for cc in rec:
+        print("Vectorspace recommended " + str(cc['sym']))
 
 
 
@@ -110,4 +124,4 @@ def strategy2():
 #since a lot of these methods will be created dont
 #use multithreading just run the program a bunch of times
 if __name__ == "__main__":
-    strategy2()
+    strategy3()

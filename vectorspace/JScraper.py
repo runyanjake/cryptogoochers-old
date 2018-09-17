@@ -230,11 +230,12 @@ class JScraper:
         if curr not in self.__currencyTypes:
             raise JScraperException("Attempted to retrive lows for currency not stored in database.")
         tablename = curr + "prices"
-        itor = 1
+        itor = 0
         for row in self.__connection.execute("SELECT * FROM " + str(tablename) + " ORDER BY date DESC"):
             lows.append(row[6])
             if itor >= max:
                 break
+            itor = itor + 1
         return lows
 
     #retrieves last n pricing records of the medians for a certain currency, ordered by latest first
@@ -243,11 +244,12 @@ class JScraper:
         if curr not in self.__currencyTypes:
             raise JScraperException("Attempted to retrive lows for currency not stored in database.")
         tablename = curr + "prices"
-        itor = 1
+        itor = 0
         for row in self.__connection.execute("SELECT * FROM " + str(tablename) + " ORDER BY date DESC"):
             lows.append(row[2])
             if itor >= max:
                 break
+            itor = itor + 1
         return lows
 
     #retrieves last n pricing records of the highs for a certain currency, ordered by latest first
@@ -256,11 +258,12 @@ class JScraper:
         if curr not in self.__currencyTypes:
             raise JScraperException("Attempted to retrive lows for currency not stored in database.")
         tablename = curr + "prices"
-        itor = 1
+        itor = 0
         for row in self.__connection.execute("SELECT * FROM " + str(tablename) + " ORDER BY date DESC"):
             lows.append(row[4])
             if itor >= max:
                 break
+            itor = itor + 1
         return lows
 
     #requires a connection to be defined
