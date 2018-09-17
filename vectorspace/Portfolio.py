@@ -114,6 +114,7 @@ class Portfolio:
             for ticker in self.__portfolio:
                 price_per_share = scpr.retrieveMedians(curr=ticker)[0]
                 total = total + price_per_share * self.__portfolio[ticker]
+            del scpr
             return total
 
     #returns the amount of each coin held by the portfolio.
@@ -178,6 +179,7 @@ class Portfolio:
         else:
             self.__portfolio[ticker] = amt
         self.__cashpool_amt = self.__cashpool_amt - (amt * price_per_share)
+        del scpr
         #update hardcopy portfolio
         self.save()
 
@@ -196,6 +198,7 @@ class Portfolio:
             self.__cashpool_amt = self.__cashpool_amt + (amt * price_per_share)
         else:
             raise PortfolioException("Portfolio does not contain any coins of the type " + str(ticker) + ".")
+        del scpr
         #update hardcopy portfolio
         self.save()
 
