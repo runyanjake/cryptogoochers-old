@@ -3,8 +3,15 @@
     "portfolio": {
         "BTC": 0,
         "ETH": 0,
+        "XRP": 0,
+        "EOS": 0,
+        "XLM": 0,
+        "LTC": 0,
         "ADA": 0,
-        "EOS": 0
+        "MIOTA": 0,
+        "TRX": 0,
+        "USDT": 0,
+        "XMR": 0
     },
     "portfolio_id": 101010101,
     "portfolio_owner": "Jake Runyan"
