@@ -5,7 +5,7 @@ from JScraper import JScraper
 from Portfolio import Portfolio
 import time
 
-TIME_BETWEEN_ITERATIONS = 1 #15min
+TIME_BETWEEN_ITERATIONS = 900 #15min
 
 #buys cryptocurrencies whose last median was greater than the average of the last LOOKBACK_LENGTH medians
 LOOKBACK_LENGTH = 10
