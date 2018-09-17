@@ -31,6 +31,7 @@ def strategy1():
             curr_median = meds[0]
             mean_of_median = 0
             itor = 0
+            print("MEDS: " + str(meds))
             for m in meds:
                 if itor > LOOKBACK_LENGTH:
                     break
@@ -106,6 +107,7 @@ def strategy2():
 #uses significance to determine whether or not to buy.
 def strategy3():
     #TODO
+    pass
 
 # trying to use the vectorspace things to guide what i choose
 def strategy4():
