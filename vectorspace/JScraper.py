@@ -232,9 +232,9 @@ class JScraper:
         tablename = curr + "prices"
         itor = 0
         for row in self.__connection.execute("SELECT * FROM " + str(tablename) + " ORDER BY date DESC"):
-            lows.append(row[6])
             if itor >= max:
                 break
+            lows.append(row[6])
             itor = itor + 1
         return lows
 
@@ -246,9 +246,9 @@ class JScraper:
         tablename = curr + "prices"
         itor = 0
         for row in self.__connection.execute("SELECT * FROM " + str(tablename) + " ORDER BY date DESC"):
-            lows.append(row[2])
             if itor >= max:
                 break
+            lows.append(row[2])
             itor = itor + 1
         return lows
 
@@ -260,9 +260,9 @@ class JScraper:
         tablename = curr + "prices"
         itor = 0
         for row in self.__connection.execute("SELECT * FROM " + str(tablename) + " ORDER BY date DESC"):
-            lows.append(row[4])
             if itor >= max:
                 break
+            lows.append(row[4])
             itor = itor + 1
         return lows
 

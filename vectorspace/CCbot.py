@@ -5,7 +5,7 @@ from JScraper import JScraper
 from Portfolio import Portfolio
 import time
 
-TIME_BETWEEN_ITERATIONS = 900 #15min
+TIME_BETWEEN_ITERATIONS = 1 #15min
 
 #buys cryptocurrencies whose last median was greater than the average of the last LOOKBACK_LENGTH medians
 LOOKBACK_LENGTH = 10
@@ -31,7 +31,6 @@ def strategy1():
             curr_median = meds[0]
             mean_of_median = 0
             itor = 0
-            print("MEDS: " + str(meds))
             for m in meds:
                 if itor > LOOKBACK_LENGTH:
                     break
