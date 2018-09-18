@@ -10,17 +10,18 @@ import time
 TIME_BETWEEN_ITERATIONS = 900 #15min
 
 def dataScavenger(delay=TIME_BETWEEN_ITERATIONS):
-    scpr = JScraper()
+    scpr = JScraper(browser_type="chrome",browser_driverpath="./browserdrivers/chromedriver")
     while True:
         data = scpr.scrape()
         scpr.recordData(data)
-        time.sleep(TIME_BETWEEN_ITERATIONS) #sec
+        scpr.renderGraph()
+        time.sleep(delay) #sec
 
 #buys cryptocurrencies whose last median was greater than the average of the last LOOKBACK_LENGTH medians
 LOOKBACK_LENGTH = 10
 def strategy1():
     print("Running Strategy 1.")
-    scpr = JScraper()
+    scpr = JScraper(browser_type="chrome",browser_driverpath="./browserdrivers/chromedriver")
     p = Portfolio("portfolio_strat1.pf")
     myportfolio = p.getPortfolio()
     while True:
@@ -58,7 +59,7 @@ def strategy1():
 #performs strategy 1 on just bitcoin
 def strategy2():
     print("Running Strategy 2.")
-    scpr = JScraper()
+    scpr = JScraper(browser_type="chrome",browser_driverpath="./browserdrivers/chromedriver")
     p = Portfolio("portfolio_strat2.pf")
     myportfolio = p.getPortfolio()
     while True:
@@ -97,7 +98,7 @@ def strategy2():
 def strategy3():
     lookback = 100
     print("Running Strategy 3.")
-    scpr = JScraper()
+    scpr = JScraper(browser_type="chrome",browser_driverpath="./browserdrivers/chromedriver")
     p = Portfolio("portfolio_strat3.pf")
     myportfolio = p.getPortfolio()
     while True:
@@ -162,7 +163,7 @@ if __name__ == "__main__":
         if sys.argv[1] == "scrape":
             dataScavenger()
         elif sys.argv[1] == "constscrape":
-            dataScavenger(1)
+            dataScavenger(delay=1)
         elif sys.argv[1] == "one":
             strategy1()
         elif sys.argv[1] == "two":

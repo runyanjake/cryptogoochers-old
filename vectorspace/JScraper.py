@@ -82,6 +82,8 @@ class JScraper:
             chrome_options = webdriver.ChromeOptions()
             if browser_isheadless:
                 chrome_options.add_argument("--headless")
+            if platform.system() == "Windows":
+                chrome_options.add_argument("--disable-gpu")
             self.__webdriver = webdriver.Chrome(browser_driverpath, chrome_options=chrome_options)
         self.__webdriver.set_page_load_timeout(30)
 

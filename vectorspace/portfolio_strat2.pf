@@ -1,7 +1,7 @@
 {
-    "cashpool_amt": 9000.0,
+    "cashpool_amt": 10000,
     "portfolio": {
-        "BTC": 0.1585365176978278
+        "BTC": 0.0
     },
     "portfolio_id": 101010101,
     "portfolio_owner": "BTC Only Profile"

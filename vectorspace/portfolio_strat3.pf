@@ -1,7 +1,7 @@
 {
-    "cashpool_amt": 10000.0,
+    "cashpool_amt": 10000,
     "portfolio": {
-        "BTC": 0
+        "BTC": 0.0
     },
     "portfolio_id": 101010101,
     "portfolio_owner": "BTC Buying on Statistics"
