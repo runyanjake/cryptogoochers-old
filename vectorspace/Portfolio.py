@@ -1,5 +1,6 @@
 # @author Jake Runyan
 # @desc A hypothetical trader that unit tests a variety of VectorSpaces' new APIs to see if using those as margins to trade is worth it.
+# ASSUMED FILE TYPES ARE ".PF"
 
 import ccxt 
 import datetime
@@ -20,6 +21,7 @@ import sqlite3
 import sys
 
 #exception type for creating a special exception with a string
+#THESE EXCEPTIONS ARE FATAL AND SHOULD BE CAUGHT & TRIGGER Portfolio.__del__
 class PortfolioException(Exception):
     pass
 

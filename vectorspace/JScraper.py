@@ -34,6 +34,7 @@ class Target:
         return ("{" + str(self.ticker) + " | " + str(self.url) + " | " + str(self.xpath) + "}")
 
 #exception type for creating a special exception with a string
+#THESE EXCEPTIONS ARE FATAL AND SHOULD BE CAUGHT & TRIGGER JScraper.__del__
 class JScraperException(Exception):
     pass
 
