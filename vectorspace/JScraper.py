@@ -133,6 +133,28 @@ class JScraper:
         if not(self.__log == None):
             self.__log.close()
 
+    #Figures out relevant cryptocurrencies and tries to add them to a directory to be used with the scraper
+    def updateDirectory(self):
+        dir = open("directory2.json", 'r')
+        data = json.load(dir)
+        CURRENCY_TYPES = []
+        CMP_TICKERS = []
+        CMP_NAMES = []
+        for curr in data:
+            CURRENCY_TYPES.append(curr)
+        self.__webdriver.get("https://coinmarketcap.com")
+        table = self.__webdriver.find_element_by_xpath('//table[@id="currencies"]')
+
+        for ticker in table.find_elements_by_class_name("hidden-xs"):
+            CMP_TICKERS.append(ticker.text)
+            
+        for name in table.find_elements_by_class_name("currency-name-container"):
+            CMP_NAMES.append(name.text)
+        
+        for a in range(len(CMP_NAMES)):
+            print(str(CMP_TICKERS[a]) + ": " + str(CMP_NAMES[a]) + "\n")
+        dir.close()
+
     #scrapes data from all targets, returns a dictionary containing scraped values sorted by ticker
     #NOTE: uses a regex to parse strings so needs modification for non-numerics
     def scrape(self, currency="ALL", iterations=1 ,num_attempts=10):
@@ -333,7 +355,8 @@ if __name__ == "__main__":
     # results = scpr.scrape()
     # scpr.recordData(results)
     # scpr.renderGraph()
-    print(scpr.retrieveMedians("BTC", 5))
-    print(scpr.retrieveLows("BTC", 5))
-    print(scpr.retrieveHighs("BTC", 5))
+    # print(scpr.retrieveMedians("BTC", 5))
+    # print(scpr.retrieveLows("BTC", 5))
+    # print(scpr.retrieveHighs("BTC", 5))
+    scpr.updateDirectory()
     del scpr

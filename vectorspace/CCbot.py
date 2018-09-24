@@ -1,11 +1,13 @@
 # @author Jake Runyan
-# @desc A bot made from a JScraper and Portfolio
+# @desc A bot made from a JScraper and Portfolio, also a test grounds for new features
 
 from JScraper import JScraper 
 from Portfolio import Portfolio
 import math
 import sys
 import time
+import requests
+import json
 
 TIME_BETWEEN_ITERATIONS = 900 #15min
 
@@ -144,8 +146,6 @@ def strategy3():
 
 # trying to use the vectorspace things to guide what i choose
 def strategy4():
-    import requests
-    import json
     API_ENDPOINT = "https://vectorspace.ai/recommend/app/correlated_cryptos"
     data = {"query" : "machine+learning&vxv_token_addr=0xC2A568489BF6AAC5907fa69f8FD4A9c04323081D"}
     r = requests.post(url = API_ENDPOINT, data = data)
