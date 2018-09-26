@@ -133,26 +133,40 @@ class JScraper:
         if not(self.__log == None):
             self.__log.close()
 
-    #Figures out relevant cryptocurrencies and tries to add them to a directory to be used with the scraper
+    #Figures out relevant cryptocurrencies (top rated by coinmarketcap) and tries to add them to a directory to be used with the scraper
     def updateDirectory(self):
-        dir = open("directory2.json", 'r')
+        dir = open("directory.json", 'r')
         data = json.load(dir)
-        CURRENCY_TYPES = []
+        dir.close()
+
         CMP_TICKERS = []
         CMP_NAMES = []
-        for curr in data:
-            CURRENCY_TYPES.append(curr)
-        self.__webdriver.get("https://coinmarketcap.com")
-        table = self.__webdriver.find_element_by_xpath('//table[@id="currencies"]')
 
-        for ticker in table.find_elements_by_class_name("hidden-xs"):
-            CMP_TICKERS.append(ticker.text)
-            
-        for name in table.find_elements_by_class_name("currency-name-container"):
-            CMP_NAMES.append(name.text)
+        try:
+            self.__webdriver.get("https://coinmarketcap.com")
+            table = self.__webdriver.find_element_by_xpath('//table[@id="currencies"]')
+            for ticker in table.find_elements_by_class_name("hidden-xs"):
+                CMP_TICKERS.append(ticker.text)
+            for name in table.find_elements_by_class_name("currency-name-container"):
+                CMP_NAMES.append(name.text)
+        except:
+            print("A error was handled while gathering directory update information.")
+
+        CMP_URL_PREFIX = "https://coinmarketcap.com/currencies/"
+        CMP_CC_PAGE_XPATH = "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        CR_URL_PREFIX = "https://coinranking.com/coin/"
+        CR_CC_PAGE_XPATH = "//span[@class='price__price']"
         
-        for a in range(len(CMP_NAMES)):
-            print(str(CMP_TICKERS[a]) + ": " + str(CMP_NAMES[a]) + "\n")
+        success = 0
+        for a in range(len(CMP_TICKERS)):
+            if not CMP_TICKERS[a] in data: #discover new CC
+                CMPurl = CMP_URL_PREFIX + CMP_NAMES[a].lower().replace(" ", "-").replace(".", "-")
+                CRurl = CR_URL_PREFIX + CMP_NAMES[a].lower().replace(" ", "").replace(".", "") + "-" + CMP_TICKERS[a].lower()
+                data[CMP_TICKERS[a]] = []
+                data[CMP_TICKERS[a]].append({"url": CMPurl, "xpath": CMP_CC_PAGE_XPATH})
+                data[CMP_TICKERS[a]].append({"url": CRurl, "xpath": CR_CC_PAGE_XPATH})
+        dir = open("directory.json", "w")
+        json.dump(data, dir, indent=4)
         dir.close()
 
     #scrapes data from all targets, returns a dictionary containing scraped values sorted by ticker
@@ -223,31 +237,32 @@ class JScraper:
     def recordData(self, data):
         if not(data == None) and len(data) > 0:
             for currency_type in data:
-                data_list = data[currency_type]
-                data_list_inorder = sorted(data_list)
-                median_price = -1.0
-                median_price_site = None
-                lo_price = data_list_inorder[0][0]
-                lo_price_site = data_list_inorder[0][1]
-                hi_price = data_list_inorder[len(data_list_inorder)-1][0]
-                hi_price_site = data_list_inorder[len(data_list_inorder)-1][1]
-                while len(data_list_inorder) > 2:
-                    del data_list_inorder[0]
-                    del data_list_inorder[len(data_list_inorder)-1]
-                if len(data_list_inorder) == 2:
-                    median_price = (data_list_inorder[0][0] + data_list_inorder[1][0]) / 2.0
-                    median_price_site = data_list_inorder[1][1]
-                else: #is 1
-                    median_price = data_list_inorder[0][0]
-                    median_price_site = data_list_inorder[0][1]
-                self.__makeLogEntry("For " + str(currency_type) + "  low price: " + str(lo_price) + " at " + str(lo_price_site) + "  median price: " + str(median_price) + " at " + str(median_price_site) + "  hi price: " + str(hi_price) + " at " + str(hi_price_site) + "\n")
-                tablename = currency_type + "prices"
-                # try:
-                prepstmt = "INSERT INTO " + str(tablename) + " VALUES ('" + str(currency_type) + "','"  + str(datetime.datetime.utcnow()) + "'," + str(median_price) + ",'" + str(median_price_site) + "'," + str(hi_price) + ",'" + str(hi_price_site) + "',"  + str(lo_price) + ",'" + str(lo_price_site) + "')" 
-                self.__connection.execute(prepstmt)
-                self.__connection.commit()
-                # except:
-                #     print("AN ERROR WAS HANDLED DURING DATABASE ENTRY")
+                if len(data[currency_type]) > 0:
+                    data_list = data[currency_type]
+                    data_list_inorder = sorted(data_list)
+                    median_price = -1.0
+                    median_price_site = None
+                    lo_price = data_list_inorder[0][0]
+                    lo_price_site = data_list_inorder[0][1]
+                    hi_price = data_list_inorder[len(data_list_inorder)-1][0]
+                    hi_price_site = data_list_inorder[len(data_list_inorder)-1][1]
+                    while len(data_list_inorder) > 2:
+                        del data_list_inorder[0]
+                        del data_list_inorder[len(data_list_inorder)-1]
+                    if len(data_list_inorder) == 2:
+                        median_price = (data_list_inorder[0][0] + data_list_inorder[1][0]) / 2.0
+                        median_price_site = data_list_inorder[1][1]
+                    else: #is 1
+                        median_price = data_list_inorder[0][0]
+                        median_price_site = data_list_inorder[0][1]
+                    self.__makeLogEntry("For " + str(currency_type) + "  low price: " + str(lo_price) + " at " + str(lo_price_site) + "  median price: " + str(median_price) + " at " + str(median_price_site) + "  hi price: " + str(hi_price) + " at " + str(hi_price_site) + "\n")
+                    tablename = currency_type + "prices"
+                    # try:
+                    prepstmt = "INSERT INTO " + str(tablename) + " VALUES ('" + str(currency_type) + "','"  + str(datetime.datetime.utcnow()) + "'," + str(median_price) + ",'" + str(median_price_site) + "'," + str(hi_price) + ",'" + str(hi_price_site) + "',"  + str(lo_price) + ",'" + str(lo_price_site) + "')" 
+                    self.__connection.execute(prepstmt)
+                    self.__connection.commit()
+                    # except:
+                    #     print("AN ERROR WAS HANDLED DURING DATABASE ENTRY")
 
     #retrieves last n pricing records of the low for a certain currency, ordered by latest first
     def retrieveLows(self, curr="BTC", max=1):
@@ -308,8 +323,6 @@ class JScraper:
                     lo_vals.insert(0,row[6])
                     itor = itor + 1
 
-                print("NUMBER OF DATABASE ITEMS GRABBED: " + str(len(dates)))
-
                 pricingfilepath = "output/" + tablename
                 medianfilepath = pricingfilepath +  "_median"
 
@@ -334,7 +347,37 @@ class JScraper:
                 fig2.savefig(pricingfilepath+'.png', dpi=1000)   # save the figure to file
                 plt.close(fig2)
 
-                print("Done.")
+    def renderALLGraph(self, lookback=200):
+        all_vals = []
+        all_dates = []
+        for curr in self.__currencyTypes:
+            dates = []
+            vals = []
+            itor = 1
+            tablename = curr + "prices"
+            for row in self.__connection.execute("SELECT * FROM " + str(tablename) + " ORDER BY date DESC"):
+                if(itor < lookback):
+                    dates.insert(0,row[1])
+                    vals.insert(0,row[2])
+                    itor = itor + 1
+                else:
+                    break
+            all_vals.append(vals)
+            all_dates.append(dates)
+
+        filepath = "output/ALLcurrencies.png"
+
+        xticks = ticker.MaxNLocator(20)
+        fig, ax = plt.subplots( nrows=1, ncols=1)  # create figure & 1 axis
+        itor = 1
+        for i in range(len(all_vals)):
+            ax.plot(all_dates[i], all_vals[i], label=str(itor))
+            itor = itor + 1
+        ax.xaxis.set_major_locator(xticks) #set number of ticks on plot
+        plt.setp(ax.xaxis.get_majorticklabels(), rotation=270) #rotate labels
+        plt.tight_layout() #make room for lablels
+        fig.savefig(filepath, dpi=1000)   # save the figure to file
+        plt.close(fig)
 
     def printTargets(self):
         for target in self.__targets:

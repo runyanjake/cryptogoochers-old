@@ -14,9 +14,11 @@ TIME_BETWEEN_ITERATIONS = 900 #15min
 def dataScavenger(delay=TIME_BETWEEN_ITERATIONS):
     scpr = JScraper(browser_type="chrome",browser_driverpath="./browserdrivers/chromedriver",browser_isheadless=False)
     while True:
+        scpr.updateDirectory()
         data = scpr.scrape()
         scpr.recordData(data)
         scpr.renderGraph()
+        # scpr.renderALLGraph()
         time.sleep(delay) #sec
 
 #buys cryptocurrencies whose last median was greater than the average of the last LOOKBACK_LENGTH medians

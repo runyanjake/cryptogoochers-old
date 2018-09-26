@@ -1,58 +1,1078 @@
-{"BTC": [
-    {"url": "https://coinmarketcap.com/currencies/bitcoin/", "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"}, 
-    {"url": "https://bitcoincharts.com/markets/coinbaseUSD.html", "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"}, 
-    {"url": "https://bitcoincharts.com/markets/bitstampUSD.html", "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"}, 
-    {"url": "https://bitcoincharts.com/markets/krakenUSD.html", "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"}, 
-    {"url": "https://bitcoincharts.com/markets/itbitUSD.html", "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"}, 
-    {"url": "https://bitcoincharts.com/markets/coinsbankUSD.html", "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"}, 
-    {"url": "https://bitcoincharts.com/markets/wexUSD.html", "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"}, 
-    {"url": "https://bitcoincharts.com/markets/lakeUSD.html", "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"}, 
-    {"url": "https://bitcoincharts.com/markets/cexUSD.html", "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"}, 
-    {"url": "https://bitcoincharts.com/markets/getbtcUSD.html", "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"}, 
-    {"url": "https://bitcoincharts.com/markets/localbtcUSD.html", "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"}, 
-    {"url": "https://bitcoincharts.com/markets/btcalphaUSD.html", "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"}, 
-    {"url": "https://bitcoincharts.com/markets/okcoinUSD.html", "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"}, 
-    {"url": "https://bitcoincharts.com/markets/bitbayUSD.html", "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"}, 
-    {"url": "https://bitcoincharts.com/markets/bitkonanUSD.html", "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"}, 
-    {"url": "https://coinranking.com/coin/bitcoin-btc", "xpath": "//span[@class='price__price']"}
-    ], 
-"ETH": [
-    {"url": "https://coinmarketcap.com/currencies/ethereum/", "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"}, 
-    {"url": "https://coinranking.com/coin/ethereum-eth", "xpath": "//span[@class='price__price']"}
-    ], 
-"XRP": [
-    {"url": "https://coinmarketcap.com/currencies/ripple/", "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"}, 
-    {"url": "https://coinranking.com/coin/xrp-xrp", "xpath": "//span[@class='price__price']"}
-    ], 
-"EOS": [
-    {"url": "https://coinmarketcap.com/currencies/eos/", "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"}, 
-    {"url": "https://coinranking.com/coin/eos-eos", "xpath": "//span[@class='price__price']"}
-], 
-"XLM": [
-    {"url": "https://coinmarketcap.com/currencies/stellar/", "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"}, 
-    {"url": "https://coinranking.com/coin/stellar-xlm", "xpath": "//span[@class='price__price']"}
-], 
-"LTC": [
-    {"url": "https://coinmarketcap.com/currencies/litecoin/", "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"}, 
-    {"url": "https://coinranking.com/coin/litecoin-ltc", "xpath": "//span[@class='price__price']"}
-], 
-"ADA": [
-    {"url": "https://coinmarketcap.com/currencies/cardano/", "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"}, 
-    {"url": "https://coinranking.com/coin/cardano-ada", "xpath": "//span[@class='price__price']"}
-], 
-"MIOTA": [
-    {"url": "https://coinmarketcap.com/currencies/iota/", "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"}, 
-    {"url": "https://coinranking.com/coin/iota-iot", "xpath": "//span[@class='price__price']"}
-], 
-"TRX": [
-    {"url": "https://coinmarketcap.com/currencies/tron/", "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"}, 
-    {"url": "https://coinranking.com/coin/tron-trx", "xpath": "//span[@class='price__price']"}
-], 
-"USDT": [
-    {"url": "https://coinmarketcap.com/currencies/tether/", "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"}, 
-    {"url": "https://coinranking.com/coin/tether-usdt", "xpath": "//span[@class='price__price']"}
-], 
-"XMR": [
-    {"url": "https://coinmarketcap.com/currencies/monero/", "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"}, 
-    {"url": "https://coinranking.com/coin/monero-xmr", "xpath": "//span[@class='price__price']"}
-    ]}
+{
+    "BTC": [
+        {
+            "url": "https://coinmarketcap.com/currencies/bitcoin/",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://bitcoincharts.com/markets/coinbaseUSD.html",
+            "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"
+        },
+        {
+            "url": "https://bitcoincharts.com/markets/bitstampUSD.html",
+            "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"
+        },
+        {
+            "url": "https://bitcoincharts.com/markets/krakenUSD.html",
+            "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"
+        },
+        {
+            "url": "https://bitcoincharts.com/markets/itbitUSD.html",
+            "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"
+        },
+        {
+            "url": "https://bitcoincharts.com/markets/coinsbankUSD.html",
+            "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"
+        },
+        {
+            "url": "https://bitcoincharts.com/markets/wexUSD.html",
+            "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"
+        },
+        {
+            "url": "https://bitcoincharts.com/markets/lakeUSD.html",
+            "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"
+        },
+        {
+            "url": "https://bitcoincharts.com/markets/cexUSD.html",
+            "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"
+        },
+        {
+            "url": "https://bitcoincharts.com/markets/getbtcUSD.html",
+            "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"
+        },
+        {
+            "url": "https://bitcoincharts.com/markets/localbtcUSD.html",
+            "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"
+        },
+        {
+            "url": "https://bitcoincharts.com/markets/btcalphaUSD.html",
+            "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"
+        },
+        {
+            "url": "https://bitcoincharts.com/markets/okcoinUSD.html",
+            "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"
+        },
+        {
+            "url": "https://bitcoincharts.com/markets/bitbayUSD.html",
+            "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"
+        },
+        {
+            "url": "https://bitcoincharts.com/markets/bitkonanUSD.html",
+            "xpath": "//div[@id='market_summary']/child::div/child::p/child::span"
+        },
+        {
+            "url": "https://coinranking.com/coin/bitcoin-btc",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "ETH": [
+        {
+            "url": "https://coinmarketcap.com/currencies/ethereum/",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/ethereum-eth",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "XRP": [
+        {
+            "url": "https://coinmarketcap.com/currencies/ripple/",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/xrp-xrp",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "EOS": [
+        {
+            "url": "https://coinmarketcap.com/currencies/eos/",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/eos-eos",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "XLM": [
+        {
+            "url": "https://coinmarketcap.com/currencies/stellar/",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/stellar-xlm",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "LTC": [
+        {
+            "url": "https://coinmarketcap.com/currencies/litecoin/",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/litecoin-ltc",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "ADA": [
+        {
+            "url": "https://coinmarketcap.com/currencies/cardano/",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/cardano-ada",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "MIOTA": [
+        {
+            "url": "https://coinmarketcap.com/currencies/iota/",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/iota-iot",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "TRX": [
+        {
+            "url": "https://coinmarketcap.com/currencies/tron/",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/tron-trx",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "USDT": [
+        {
+            "url": "https://coinmarketcap.com/currencies/tether/",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/tether-usdt",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "XMR": [
+        {
+            "url": "https://coinmarketcap.com/currencies/monero/",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/monero-xmr",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "BCH": [
+        {
+            "url": "https://coinmarketcap.com/currencies/bitcoin-cash",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/bitcoincash-bch",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "DASH": [
+        {
+            "url": "https://coinmarketcap.com/currencies/dash",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/dash-dash",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "NEO": [
+        {
+            "url": "https://coinmarketcap.com/currencies/neo",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/neo-neo",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "ETC": [
+        {
+            "url": "https://coinmarketcap.com/currencies/ethereum-classic",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/ethereumclassic-etc",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "BNB": [
+        {
+            "url": "https://coinmarketcap.com/currencies/binance-coin",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/binancecoin-bnb",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "XTZ": [
+        {
+            "url": "https://coinmarketcap.com/currencies/tezos",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/tezos-xtz",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "XEM": [
+        {
+            "url": "https://coinmarketcap.com/currencies/nem",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/nem-xem",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "VET": [
+        {
+            "url": "https://coinmarketcap.com/currencies/vechain",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/vechain-vet",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "DOGE": [
+        {
+            "url": "https://coinmarketcap.com/currencies/dogecoin",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/dogecoin-doge",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "ZEC": [
+        {
+            "url": "https://coinmarketcap.com/currencies/zcash",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/zcash-zec",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "OMG": [
+        {
+            "url": "https://coinmarketcap.com/currencies/omisego",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/omisego-omg",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "BCN": [
+        {
+            "url": "https://coinmarketcap.com/currencies/bytecoin",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/bytecoin-bcn",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "BTG": [
+        {
+            "url": "https://coinmarketcap.com/currencies/bitcoin-gold",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/bitcoingold-btg",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "LSK": [
+        {
+            "url": "https://coinmarketcap.com/currencies/lisk",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/lisk-lsk",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "ZRX": [
+        {
+            "url": "https://coinmarketcap.com/currencies/0x",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/0x-zrx",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "ONT": [
+        {
+            "url": "https://coinmarketcap.com/currencies/ontology",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/ontology-ont",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "QTUM": [
+        {
+            "url": "https://coinmarketcap.com/currencies/qtum",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/qtum-qtum",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "MKR": [
+        {
+            "url": "https://coinmarketcap.com/currencies/maker",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/maker-mkr",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "DCR": [
+        {
+            "url": "https://coinmarketcap.com/currencies/decred",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/decred-dcr",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "BTS": [
+        {
+            "url": "https://coinmarketcap.com/currencies/bitshares",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/bitshares-bts",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "NANO": [
+        {
+            "url": "https://coinmarketcap.com/currencies/nano",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/nano-nano",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "BCD": [
+        {
+            "url": "https://coinmarketcap.com/currencies/bitcoin-diamond",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/bitcoindiamond-bcd",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "ZIL": [
+        {
+            "url": "https://coinmarketcap.com/currencies/zilliqa",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/zilliqa-zil",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "DGB": [
+        {
+            "url": "https://coinmarketcap.com/currencies/digibyte",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/digibyte-dgb",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "STEEM": [
+        {
+            "url": "https://coinmarketcap.com/currencies/steem",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/steem-steem",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "ICX": [
+        {
+            "url": "https://coinmarketcap.com/currencies/icon",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/icon-icx",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "SC": [
+        {
+            "url": "https://coinmarketcap.com/currencies/siacoin",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/siacoin-sc",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "AE": [
+        {
+            "url": "https://coinmarketcap.com/currencies/aeternity",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/aeternity-ae",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "WAVES": [
+        {
+            "url": "https://coinmarketcap.com/currencies/waves",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/waves-waves",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "XVG": [
+        {
+            "url": "https://coinmarketcap.com/currencies/verge",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/verge-xvg",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "ETP": [
+        {
+            "url": "https://coinmarketcap.com/currencies/metaverse-etp",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/metaverseetp-etp",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "BTM": [
+        {
+            "url": "https://coinmarketcap.com/currencies/bytom",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/bytom-btm",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "NPXS": [
+        {
+            "url": "https://coinmarketcap.com/currencies/pundi-x",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/pundix-npxs",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "BAT": [
+        {
+            "url": "https://coinmarketcap.com/currencies/basic-attenti---",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/basicattenti-bat",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "STRAT": [
+        {
+            "url": "https://coinmarketcap.com/currencies/stratis",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/stratis-strat",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "REP": [
+        {
+            "url": "https://coinmarketcap.com/currencies/augur",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/augur-rep",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "HSR": [
+        {
+            "url": "https://coinmarketcap.com/currencies/hshare",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/hshare-hsr",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "HOT": [
+        {
+            "url": "https://coinmarketcap.com/currencies/holo",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/holo-hot",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "GNT": [
+        {
+            "url": "https://coinmarketcap.com/currencies/golem",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/golem-gnt",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "SNT": [
+        {
+            "url": "https://coinmarketcap.com/currencies/status",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/status-snt",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "KMD": [
+        {
+            "url": "https://coinmarketcap.com/currencies/komodo",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/komodo-kmd",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "ARDR": [
+        {
+            "url": "https://coinmarketcap.com/currencies/ardor",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/ardor-ardr",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "LINK": [
+        {
+            "url": "https://coinmarketcap.com/currencies/chainlink",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/chainlink-link",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "CNX": [
+        {
+            "url": "https://coinmarketcap.com/currencies/cryptonex",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/cryptonex-cnx",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "WTC": [
+        {
+            "url": "https://coinmarketcap.com/currencies/waltonchain",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/waltonchain-wtc",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "PPT": [
+        {
+            "url": "https://coinmarketcap.com/currencies/populous",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/populous-ppt",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "MITH": [
+        {
+            "url": "https://coinmarketcap.com/currencies/mithril",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/mithril-mith",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "MOAC": [
+        {
+            "url": "https://coinmarketcap.com/currencies/moac",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/moac-moac",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "IOST": [
+        {
+            "url": "https://coinmarketcap.com/currencies/iost",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/iost-iost",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "MAID": [
+        {
+            "url": "https://coinmarketcap.com/currencies/maidsafecoin",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/maidsafecoin-maid",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "KCS": [
+        {
+            "url": "https://coinmarketcap.com/currencies/kucoin-shares",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/kucoinshares-kcs",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "RHOC": [
+        {
+            "url": "https://coinmarketcap.com/currencies/rchain",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/rchain-rhoc",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "ETN": [
+        {
+            "url": "https://coinmarketcap.com/currencies/electroneum",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/electroneum-etn",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "RDD": [
+        {
+            "url": "https://coinmarketcap.com/currencies/reddcoin",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/reddcoin-rdd",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "WAN": [
+        {
+            "url": "https://coinmarketcap.com/currencies/wanchain",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/wanchain-wan",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "TUSD": [
+        {
+            "url": "https://coinmarketcap.com/currencies/trueusd",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/trueusd-tusd",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "DCN": [
+        {
+            "url": "https://coinmarketcap.com/currencies/dentacoin",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/dentacoin-dcn",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "AION": [
+        {
+            "url": "https://coinmarketcap.com/currencies/aion",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/aion-aion",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "AOA": [
+        {
+            "url": "https://coinmarketcap.com/currencies/aurora",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/aurora-aoa",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "ELF": [
+        {
+            "url": "https://coinmarketcap.com/currencies/aelf",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/aelf-elf",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "HT": [
+        {
+            "url": "https://coinmarketcap.com/currencies/huobi-token",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/huobitoken-ht",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "FUN": [
+        {
+            "url": "https://coinmarketcap.com/currencies/funfair",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/funfair-fun",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "BNT": [
+        {
+            "url": "https://coinmarketcap.com/currencies/bancor",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/bancor-bnt",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "DROP": [
+        {
+            "url": "https://coinmarketcap.com/currencies/dropil",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/dropil-drop",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "MONA": [
+        {
+            "url": "https://coinmarketcap.com/currencies/monacoin",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/monacoin-mona",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "ZEN": [
+        {
+            "url": "https://coinmarketcap.com/currencies/horizen",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/horizen-zen",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "QASH": [
+        {
+            "url": "https://coinmarketcap.com/currencies/qash",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/qash-qash",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "MANA": [
+        {
+            "url": "https://coinmarketcap.com/currencies/decentraland",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/decentraland-mana",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "GXS": [
+        {
+            "url": "https://coinmarketcap.com/currencies/gxchain",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/gxchain-gxs",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "DGD": [
+        {
+            "url": "https://coinmarketcap.com/currencies/digixdao",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/digixdao-dgd",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "ARK": [
+        {
+            "url": "https://coinmarketcap.com/currencies/ark",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/ark-ark",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "PAY": [
+        {
+            "url": "https://coinmarketcap.com/currencies/tenx",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/tenx-pay",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "NXT": [
+        {
+            "url": "https://coinmarketcap.com/currencies/nxt",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/nxt-nxt",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "MCO": [
+        {
+            "url": "https://coinmarketcap.com/currencies/crypto-com",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/cryptocom-mco",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "CMT": [
+        {
+            "url": "https://coinmarketcap.com/currencies/cybermiles",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/cybermiles-cmt",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "WAX": [
+        {
+            "url": "https://coinmarketcap.com/currencies/wax",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/wax-wax",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "POWR": [
+        {
+            "url": "https://coinmarketcap.com/currencies/power-ledger",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/powerledger-powr",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "NAS": [
+        {
+            "url": "https://coinmarketcap.com/currencies/nebulas",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/nebulas-nas",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "XIN": [
+        {
+            "url": "https://coinmarketcap.com/currencies/mixin",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/mixin-xin",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "THETA": [
+        {
+            "url": "https://coinmarketcap.com/currencies/theta-token",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/thetatoken-theta",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "BTCP": [
+        {
+            "url": "https://coinmarketcap.com/currencies/bitcoin-private",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/bitcoinprivate-btcp",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "DAI": [
+        {
+            "url": "https://coinmarketcap.com/currencies/dai",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/dai-dai",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "DRGN": [
+        {
+            "url": "https://coinmarketcap.com/currencies/dragonchain",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/dragonchain-drgn",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "LRC": [
+        {
+            "url": "https://coinmarketcap.com/currencies/loopring",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/loopring-lrc",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "ELA": [
+        {
+            "url": "https://coinmarketcap.com/currencies/elastos",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/elastos-ela",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "PIVX": [
+        {
+            "url": "https://coinmarketcap.com/currencies/pivx",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/pivx-pivx",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "GAS": [
+        {
+            "url": "https://coinmarketcap.com/currencies/gas",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/gas-gas",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "LOOM": [
+        {
+            "url": "https://coinmarketcap.com/currencies/loom-network",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/loomnetwork-loom",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "XZC": [
+        {
+            "url": "https://coinmarketcap.com/currencies/zcoin",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/zcoin-xzc",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "KIN": [
+        {
+            "url": "https://coinmarketcap.com/currencies/kin",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/kin-kin",
+            "xpath": "//span[@class='price__price']"
+        }
+    ],
+    "XET": [
+        {
+            "url": "https://coinmarketcap.com/currencies/eternal-token",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/eternaltoken-xet",
+            "xpath": "//span[@class='price__price']"
+        }
+    ]
+}
