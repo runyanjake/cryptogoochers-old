@@ -4,5 +4,10 @@
         "BTC": 0.0
     },
     "portfolio_id": 101010101,
-    "portfolio_owner": "BTC Buying on Statistics"
+    "portfolio_owner": "BTC Buying on Statistics",
+    "portfolio_trade_history": {
+        "BTC": {
+
+        }
+    }
 }

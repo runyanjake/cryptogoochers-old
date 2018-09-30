@@ -1074,5 +1074,15 @@
             "url": "https://coinranking.com/coin/eternaltoken-xet",
             "xpath": "//span[@class='price__price']"
         }
+    ],
+    "HC": [
+        {
+            "url": "https://coinmarketcap.com/currencies/hypercash",
+            "xpath": "//span[@class='h2 text-semi-bold details-panel-item--price__value']"
+        },
+        {
+            "url": "https://coinranking.com/coin/hypercash-hc",
+            "xpath": "//span[@class='price__price']"
+        }
     ]
 }

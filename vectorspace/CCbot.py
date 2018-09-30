@@ -11,14 +11,15 @@ import json
 
 TIME_BETWEEN_ITERATIONS = 900 #15min
 
-def dataScavenger(delay=TIME_BETWEEN_ITERATIONS):
+def dataScavenger(delay=TIME_BETWEEN_ITERATIONS, rendergraphs=False):
     scpr = JScraper(browser_type="chrome",browser_driverpath="./browserdrivers/chromedriver")
     while True:
         scpr.updateDirectory()
         data = scpr.scrape()
         scpr.recordData(data)
-        scpr.renderGraph()
-        # scpr.renderALLGraph()
+        if rendergraphs:
+            scpr.renderGraph()
+            scpr.renderALLGraph()
         time.sleep(delay) #sec
 
 #buys cryptocurrencies whose last median was greater than the average of the last LOOKBACK_LENGTH medians
@@ -164,6 +165,8 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         if sys.argv[1] == "scrape":
             dataScavenger()
+        elif sys.argv[1] == "graphs":
+            dataScavenger(rendergraphs=True)
         elif sys.argv[1] == "constscrape":
             dataScavenger(delay=1)
         elif sys.argv[1] == "one":

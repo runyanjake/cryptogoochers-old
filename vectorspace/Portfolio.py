@@ -31,6 +31,7 @@ class Portfolio:
     __cashpool_amt = None
     __portfolio_id = None
     __portfolio_owner = None
+    __portfolio_trade_history = {}
     __portfolio = {}
 
     #public
@@ -58,22 +59,28 @@ class Portfolio:
         tmp = data["portfolio"]
         if tmp == None:
             raise PortfolioException("Corrupted portfolio file: No Portfolio for " + str(path_to_file))
-        for entry in tmp:
-            self.__portfolio[entry] = tmp[entry]
-            # for item in entry:
-            #     self.__portfolio[item] = entry[item]
+        if tmp is not None and len(tmp) > 0:
+            for entry in tmp:
+                self.__portfolio[entry] = tmp[entry]
+        tmp = data["portfolio_trade_history"]
+        if tmp == None:
+            raise PortfolioException("Corrupted portfolio file: No Portfolio Trade History for " + str(path_to_file))
+        if tmp is not None and len(tmp) > 0:
+            for entry in tmp:
+                self.__portfolio_trade_history[entry] = tmp[entry]
         self.__filepath = path_to_file
 
     @staticmethod
     #Creates new instance of portfolio, as a JSON file. this DOES NOT create a PF instance
     #ID must be number, owner must be string, portfolio must be dictionary of string : number pairs denoting ticker : amount relation
     #portfolio id is mainly a semantic identifier, the filename of the portfolio is the important thing.
-    def generatePortfolio(path, portfolioID, portfolioOwner, portfolio, cashpool_amount):
+    def generatePortfolio(path, portfolioID, portfolioOwner, portfolio, portfolioTradeHistory, cashpool_amount):
         data = {}
         data["cashpool_amt"] = cashpool_amount
         data["portfolio"] = portfolio
         data["portfolio_id"] = portfolioID
         data['portfolio_owner'] = portfolioOwner
+        data['portfolio_trade_history'] = portfolioTradeHistory
         try:
             open(path)
             raise PortfolioException("A portfolio with this name exists. Portfolios will not overwrite other portfolios.")
@@ -99,6 +106,10 @@ class Portfolio:
     #a getter for portfolio contents
     def getPortfolio(self):
         return self.__portfolio
+
+    #a getter for portfolio trade history contents
+    def getTradeHistory(self):
+        return self.__portfolio_trade_history
 
     #a getter for portfolio cashpool
     def getCashpool(self):
@@ -133,6 +144,7 @@ class Portfolio:
         data["portfolio"] = self.__portfolio
         data["portfolio_id"] = self.__portfolio_id
         data['portfolio_owner'] = self.__portfolio_owner
+        data['portfolio_trade_history'] = self.__portfolio_trade_history
         file = open(self.__filepath, "w+")
         json.dump(data, file, indent=4)
 
@@ -180,6 +192,7 @@ class Portfolio:
             self.__portfolio[ticker] = self.__portfolio[ticker] + amt
         else:
             self.__portfolio[ticker] = amt
+        self.__portfolio_trade_history[ticker].append((ticker, "BUY", price_per_share, amt))
         self.__cashpool_amt = self.__cashpool_amt - (amt * price_per_share)
         del scpr
         #update hardcopy portfolio
@@ -198,6 +211,7 @@ class Portfolio:
                 raise PortfolioException("Portfolio does not contain that amount of " + str(ticker) + ".")
             self.__portfolio[ticker] = self.__portfolio[ticker] - amt
             self.__cashpool_amt = self.__cashpool_amt + (amt * price_per_share)
+            self.__portfolio_trade_history[ticker].append((ticker, "SELL", price_per_share, amt))
         else:
             raise PortfolioException("Portfolio does not contain any coins of the type " + str(ticker) + ".")
         del scpr

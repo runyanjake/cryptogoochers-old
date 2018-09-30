@@ -14,5 +14,13 @@
         "XMR": 0
     },
     "portfolio_id": 101010101,
-    "portfolio_owner": "BTC Only Profile"
+    "portfolio_owner": "All currencies",
+    "portfolio_trade_history": {
+        "BTC": {
+
+        },
+        "ETH": {
+
+        }
+    }
 }
