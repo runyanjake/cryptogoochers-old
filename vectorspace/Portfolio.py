@@ -192,7 +192,7 @@ class Portfolio:
             self.__portfolio[ticker] = self.__portfolio[ticker] + amt
         else:
             self.__portfolio[ticker] = amt
-        self.__portfolio_trade_history[ticker].append((ticker, "BUY", price_per_share, amt))
+        self.__portfolio_trade_history[ticker].append(("BUY", price_per_share, amt))
         self.__cashpool_amt = self.__cashpool_amt - (amt * price_per_share)
         del scpr
         #update hardcopy portfolio
@@ -211,7 +211,7 @@ class Portfolio:
                 raise PortfolioException("Portfolio does not contain that amount of " + str(ticker) + ".")
             self.__portfolio[ticker] = self.__portfolio[ticker] - amt
             self.__cashpool_amt = self.__cashpool_amt + (amt * price_per_share)
-            self.__portfolio_trade_history[ticker].append((ticker, "SELL", price_per_share, amt))
+            self.__portfolio_trade_history[ticker].append(("SELL", price_per_share, amt))
         else:
             raise PortfolioException("Portfolio does not contain any coins of the type " + str(ticker) + ".")
         del scpr

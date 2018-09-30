@@ -147,14 +147,40 @@ def strategy3():
         print("Total worth: " + str(p.getWorth()) + ".\n")
         time.sleep(TIME_BETWEEN_ITERATIONS) #sec
 
-# trying to use the vectorspace things to guide what i choose
+#using the portfolio trade history to influence trades
 def strategy4():
+    lookback = 75
+    print("Running Strategy 4.")
+    scpr = JScraper(browser_type="chrome",browser_driverpath="./browserdrivers/chromedriver")
+    p = Portfolio("portfolio_strat4.pf")
+    myportfolio = p.getPortfolio()
+    while True:
+        history = p.getTradeHistory()
+        for curr in myportfolio: #do it this way because user has control over portfolio contents, not history
+            if curr in history:
+                curr_history = history[curr]
+                curr_medians = scpr.retrieveMedians(curr=curr, max=lookback)
+
+                #TODO: implement some trading method using the history and medians here
+
+                print(curr_history)
+                print(curr_medians)
+                print("\n\n")
+            
+
+        print(p)
+        print("Total worth: " + str(p.getWorth()) + ".\n")
+        time.sleep(TIME_BETWEEN_ITERATIONS) #sec
+
+# trying to use the vectorspace things to guide what i choose
+def strategy5():
     API_ENDPOINT = "https://vectorspace.ai/recommend/app/correlated_cryptos"
     data = {"query" : "machine+learning&vxv_token_addr=0xC2A568489BF6AAC5907fa69f8FD4A9c04323081D"}
     r = requests.post(url = API_ENDPOINT, data = data)
     rec = json.loads(r.text)
     for cc in rec:
         print("Vectorspace recommended " + str(cc['sym']))
+        
 
 
 
@@ -176,6 +202,8 @@ if __name__ == "__main__":
         elif sys.argv[1] == "three":
             strategy3()
         elif sys.argv[1] == "four":
+            strategy4()
+        elif sys.argv[1] == "five":
             strategy4()
         else: 
             dataScavenger()

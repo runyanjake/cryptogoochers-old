@@ -16,11 +16,11 @@
     "portfolio_id": 101010101,
     "portfolio_owner": "All currencies",
     "portfolio_trade_history": {
-        "BTC": {
+        "BTC": [
 
-        },
-        "ETH": {
-
-        }
+        ],
+        "ETH": [
+            
+        ]
     }
 }

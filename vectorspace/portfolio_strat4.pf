@@ -1,0 +1,28 @@
+{
+    "cashpool_amt": 10000,
+    "portfolio": {
+        "BTC": 0.0,
+        "ETH": 0.0
+    },
+    "portfolio_id": 101010101,
+    "portfolio_owner": "BTC Buying on Trade History",
+    "portfolio_trade_history": {
+        "BTC": [
+            [
+                "BUY",
+                6581.3,
+                0.11076838922401348
+            ],
+            [
+                "BUY",
+                6581.3,
+                0.09969155030161214
+            ],
+            [
+                "BUY",
+                6581.3,
+                0.08972239527145093
+            ]
+        ]
+    }
+}
